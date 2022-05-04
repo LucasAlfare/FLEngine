@@ -35,6 +35,6 @@ class Cube(
       Triangle(p0 = d, p1 = c, p2 = g, color = Color.YELLOW),
       Triangle(p0 = g, p1 = c, p2 = h, color = Color.YELLOW)
     ),
-    scaleFactor = 20.0
+    scaleFactor = 100.0
   )
 )

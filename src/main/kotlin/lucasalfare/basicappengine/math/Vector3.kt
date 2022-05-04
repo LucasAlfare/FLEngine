@@ -10,12 +10,14 @@ class Vector3(
   var z: Double = 0.0
 ) {
 
-  fun euclideanLength() = sqrt((x * x) + (y * y) + (z * z))
+  fun euclideanLength() =
+    sqrt((x * x) + (y * y) + (z * z))
 
   /**
    * Returns the dot product between this vector and the param {@code v}.
    */
-  fun dotProduct(v: Vector3) = (x * v.x) + (y * v.y) + (z * v.z)
+  fun dotProduct(v: Vector3) =
+    (x * v.x) + (y * v.y) + (z * v.z)
 
   /**
    * Returns the cross product between this vector and the param {@code v}.

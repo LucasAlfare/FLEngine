@@ -20,6 +20,8 @@ data class Triangle(
   var averageZ = 0.0
   var normal = 0.0
 
+  private val vertices = Array(3) { Vector3() }
+
   fun update(
     source: Triangle,
     position: Vector3 = Vector3(),
@@ -43,17 +45,107 @@ data class Triangle(
 
     //then calculates the normal
     normal = (p1.x - p0.x) * (p2.y - p0.y) - (p1.y - p0.y) * (p2.x - p0.x)
+
+    vertices[0] = p0
+    vertices[1] = p1
+    vertices[2] = p2
+    vertices.sortBy { it.y }
   }
 
   fun render(renderer: Renderer) {
+    renderer.g2d.color = color
+    rasterize(renderer)
+  }
+
+  private fun rasterize(renderer: Renderer) {
     val p = Path2D.Double()
 
-    p.moveTo(p0.x, p0.y)
-    p.lineTo(p1.x, p1.y)
-    p.lineTo(p2.x, p2.y)
-    p.closePath()
+    fun rasterizeFlatBottom(v1: Vector3, v2: Vector3, v3: Vector3) {
+      val inverseSlope1 = (v2.x - v1.x) / (v2.y - v1.y)
+      val inverseSlope2 = (v3.x - v1.x) / (v3.y - v1.y)
+      var currX1 = v1.x
+      var currX2 = v1.x
+      var scanLineY = v1.y
+      while (scanLineY <= v2.y) {
+        p.moveTo(currX1, scanLineY)
+        p.lineTo(currX2, scanLineY)
 
-    renderer.g2d.color = color
-    renderer.g2d.fill(p)
+        currX1 += inverseSlope1
+        currX2 += inverseSlope2
+
+        scanLineY++
+      }
+    }
+
+    fun rasterizeFlatTop(v1: Vector3, v2: Vector3, v3: Vector3) {
+      val inverseSlope1 = ((v3.x - v1.x) / (v3.y - v1.y))
+      val inverseSlope2 = ((v3.x - v2.x) / (v3.y - v2.y))
+      var currX1 = v3.x
+      var currX2 = v3.x
+      var scanLineY = v3.y
+      while (scanLineY > v1.y) {
+        p.moveTo(currX1, scanLineY)
+        p.lineTo(currX2, scanLineY)
+
+        currX1 -= inverseSlope1
+        currX2 -= inverseSlope2
+
+        scanLineY--
+      }
+    }
+
+    if (vertices[1].y == vertices[2].y) {
+      rasterizeFlatBottom(vertices[0], vertices[1], vertices[2])
+    } else if (vertices[0].y == vertices[1].y) {
+      rasterizeFlatTop(vertices[0], vertices[1], vertices[2])
+    } else {
+      val vertex4 = Vector3(
+        x = (vertices[0].x + ((vertices[1].y - vertices[0].y) / (vertices[2].y - vertices[0].y)) * (vertices[2].x - vertices[0].x)),
+        y = vertices[1].y
+      )
+
+      rasterizeFlatTop(vertices[1], vertex4, vertices[2])
+      rasterizeFlatBottom(vertices[0], vertices[1], vertex4)
+    }
+
+    renderer.g2d.draw(p)
   }
+
+//  private fun rasterizeFlatBottom(v1: Vector3, v2: Vector3, v3: Vector3, renderer: Renderer) {
+//    val inverseSlope1 = (v2.x - v1.x) / (v2.y - v1.y)
+//    val inverseSlope2 = (v3.x - v1.x) / (v3.y - v1.y)
+//    val p = Path2D.Double()
+//    var currX1 = v1.x
+//    var currX2 = v1.x
+//    var scanLineY = v1.y
+//    while (scanLineY <= v2.y) {
+//      p.moveTo(currX1, scanLineY)
+//      p.lineTo(currX2, scanLineY)
+//
+//      currX1 += inverseSlope1
+//      currX2 += inverseSlope2
+//
+//      scanLineY++
+//    }
+//    renderer.g2d.draw(p)
+//  }
+
+//  private fun rasterizeFlatTop(v1: Vector3, v2: Vector3, v3: Vector3, renderer: Renderer) {
+//    val inverseSlope1 = ((v3.x - v1.x) / (v3.y - v1.y))
+//    val inverseSlope2 = ((v3.x - v2.x) / (v3.y - v2.y))
+//    val p = Path2D.Double()
+//    var currX1 = v3.x
+//    var currX2 = v3.x
+//    var scanLineY = v3.y
+//    while (scanLineY > v1.y) {
+//      p.moveTo(currX1, scanLineY)
+//      p.lineTo(currX2, scanLineY)
+//
+//      currX1 -= inverseSlope1
+//      currX2 -= inverseSlope2
+//
+//      scanLineY--
+//    }
+//    renderer.g2d.draw(p)
+//  }
 }
