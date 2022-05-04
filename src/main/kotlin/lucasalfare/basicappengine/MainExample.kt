@@ -2,9 +2,6 @@ package lucasalfare.basicappengine
 
 import lucasalfare.basicappengine.graphics.*
 import lucasalfare.basicappengine.math.Cube
-import lucasalfare.basicappengine.math.Mesh
-import lucasalfare.basicappengine.math.Triangle
-import lucasalfare.basicappengine.math.Vector3
 
 class MainExample : AbstractApp() {
 
@@ -15,11 +12,13 @@ class MainExample : AbstractApp() {
   }
 
   override fun update(engine: Engine, deltaTime: Float) {
-
+    cube.mesh.update(deltaTime) {
+      cube.mesh.rotation.y += 1 * it
+    }
   }
 
   override fun render(engine: Engine, renderer: Renderer) {
-
+    cube.mesh.render(renderer)
   }
 }
 

@@ -11,6 +11,12 @@ class Vector3(var x: Double = 0.0, var y: Double = 0.0, var z: Double = 0.0) {
     z = z + translation.z
   )
 
+  fun scale(scalar: Double) = Vector3(
+    x = x * scalar,
+    y = y * scalar,
+    z = z * scalar
+  )
+
   // Rotation matrix: https://en.wikipedia.org/wiki/Rotation_matrix
   fun rotate(rotation: Vector3) = Vector3(
     x = x * (cos(rotation.z) * cos(rotation.y)) +
@@ -18,11 +24,13 @@ class Vector3(var x: Double = 0.0, var y: Double = 0.0, var z: Double = 0.0) {
             sin(rotation.z) * cos(rotation.x)) +
             z * (cos(rotation.z) * sin(rotation.y) * cos(rotation.x) +
             sin(rotation.z) * sin(rotation.x)),
+
     y = x * (sin(rotation.z) * cos(rotation.y)) +
             y * (sin(rotation.z) * sin(rotation.y) * sin(rotation.x) +
             cos(rotation.z) * cos(rotation.x)) +
             z * (sin(rotation.z) * sin(rotation.y) * cos(rotation.x) -
             cos(rotation.z) * sin(rotation.x)),
+
     z = x * (-sin(rotation.y)) +
             y * (cos(rotation.y) * sin(rotation.x)) +
             z * (cos(rotation.y) * cos(rotation.x))
