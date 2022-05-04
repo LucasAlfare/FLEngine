@@ -26,15 +26,15 @@ class Cube(
       Triangle(p0 = b, p1 = e, p2 = c, color = Color.RED),
       Triangle(p0 = c, p1 = e, p2 = h, color = Color.RED),
 
-      Triangle(p0 = e, p1 = f, p2 = h, color = Color.GREEN),
-      Triangle(p0 = h, p1 = f, p2 = g, color = Color.GREEN),
+      Triangle(p0 = e, p1 = f, p2 = h, color = Color.BLUE),
+      Triangle(p0 = h, p1 = f, p2 = g, color = Color.BLUE),
 
-      Triangle(p0 = f, p1 = a, p2 = g, color = Color.RED),
-      Triangle(p0 = g, p1 = a, p2 = d, color = Color.RED),
+      Triangle(p0 = f, p1 = a, p2 = g, color = Color.PINK),
+      Triangle(p0 = g, p1 = a, p2 = d, color = Color.PINK),
 
-      Triangle(p0 = d, p1 = c, p2 = g, color = Color.WHITE),
-      Triangle(p0 = g, p1 = c, p2 = h, color = Color.WHITE)
+      Triangle(p0 = d, p1 = c, p2 = g, color = Color.YELLOW),
+      Triangle(p0 = g, p1 = c, p2 = h, color = Color.YELLOW)
     ),
-    scaleFactor = 100.0
+    scaleFactor = 20.0
   )
 )

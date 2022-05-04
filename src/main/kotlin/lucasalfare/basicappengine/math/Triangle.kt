@@ -1,6 +1,8 @@
 package lucasalfare.basicappengine.math
 
 import lucasalfare.basicappengine.graphics.Renderer
+import lucasalfare.basicappengine.graphics.ResolutionX
+import lucasalfare.basicappengine.graphics.ResolutionY
 import java.awt.Color
 import java.awt.geom.Path2D
 
@@ -11,6 +13,32 @@ data class Triangle(
   var color: Color = Color.WHITE
 ) {
 
+  var averageZ = 0.0
+  var normal = 0.0
+
+  fun update(
+    source: Triangle,
+    position: Vector3 = Vector3(),
+    rotation: Vector3 = Vector3(),
+    scaleFactor: Double = 1.0
+  ) {
+    color = source.color
+
+    p0 = source.p0.rotate(rotation).translateTo(position).scale(scaleFactor)
+    p1 = source.p1.rotate(rotation).translateTo(position).scale(scaleFactor)
+    p2 = source.p2.rotate(rotation).translateTo(position).scale(scaleFactor)
+
+    //calculate averageZ before applying perspective and other stuff
+    averageZ = (p0.z + p1.z + p2.z) / 3
+
+    p0 = p0.toPerspective().centerInBound(ResolutionX, ResolutionY)
+    p1 = p1.toPerspective().centerInBound(ResolutionX, ResolutionY)
+    p2 = p2.toPerspective().centerInBound(ResolutionX, ResolutionY)
+
+    //then, finally, calculates the normal
+    normal = (p1.x - p0.x) * (p2.y - p0.y) - (p1.y - p0.y) * (p2.x - p0.x)
+  }
+
   fun render(renderer: Renderer) {
     val p = Path2D.Double()
 
@@ -20,7 +48,6 @@ data class Triangle(
     p.closePath()
 
     renderer.g2d.color = color
-    //renderer.g2d.draw(p)
     renderer.g2d.fill(p)
   }
 }

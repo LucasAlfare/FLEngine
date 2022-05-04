@@ -1,8 +1,6 @@
 package lucasalfare.basicappengine.math
 
 import lucasalfare.basicappengine.graphics.Renderer
-import lucasalfare.basicappengine.graphics.ResolutionX
-import lucasalfare.basicappengine.graphics.ResolutionY
 
 open class Mesh(
   var triangles: Array<Triangle> = arrayOf(),
@@ -17,37 +15,22 @@ open class Mesh(
     callback(deltaTime)
 
     triangles.forEachIndexed { index, originalTriangle ->
-      drawTriangles[index].p0 =
-        originalTriangle.p0
-          .rotate(rotation)
-          .translateTo(position)
-          .scale(scaleFactor)
-          .toPerspective()
-          .centerInBound(ResolutionX, ResolutionY)
-
-      drawTriangles[index].p1 =
-        originalTriangle.p1
-          .rotate(rotation)
-          .translateTo(position)
-          .scale(scaleFactor)
-          .toPerspective()
-          .centerInBound(ResolutionX, ResolutionY)
-
-      drawTriangles[index].p2 =
-        originalTriangle.p2
-          .rotate(rotation)
-          .translateTo(position)
-          .scale(scaleFactor)
-          .toPerspective()
-          .centerInBound(ResolutionX, ResolutionY)
-
-      drawTriangles[index].color = originalTriangle.color
+      drawTriangles[index].update(
+        source = originalTriangle,
+        rotation = rotation,
+        position = position,
+        scaleFactor = scaleFactor
+      )
     }
+
+    drawTriangles.sortBy { it.averageZ }
   }
 
   fun render(renderer: Renderer) {
     drawTriangles.forEach {
-      it.render(renderer)
+      if (it.normal < 0) {
+        it.render(renderer)
+      }
     }
   }
 }
