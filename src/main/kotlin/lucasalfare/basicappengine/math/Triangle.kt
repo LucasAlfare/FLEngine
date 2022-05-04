@@ -6,6 +6,10 @@ import lucasalfare.basicappengine.graphics.ResolutionY
 import java.awt.Color
 import java.awt.geom.Path2D
 
+/**
+ * The points here must be declared in CLOCKWISE
+ * order consistently.
+ */
 data class Triangle(
   var p0: Vector3 = Vector3(),
   var p1: Vector3 = Vector3(),
@@ -24,18 +28,20 @@ data class Triangle(
   ) {
     color = source.color
 
+    //transforms the triangle points
     p0 = source.p0.rotate(rotation).translateTo(position).scale(scaleFactor)
     p1 = source.p1.rotate(rotation).translateTo(position).scale(scaleFactor)
     p2 = source.p2.rotate(rotation).translateTo(position).scale(scaleFactor)
 
-    //calculate averageZ before applying perspective and other stuff
+    //calculate averageZ before other stuff
     averageZ = (p0.z + p1.z + p2.z) / 3
 
+    //apply perspective
     p0 = p0.toPerspective().centerInBound(ResolutionX, ResolutionY)
     p1 = p1.toPerspective().centerInBound(ResolutionX, ResolutionY)
     p2 = p2.toPerspective().centerInBound(ResolutionX, ResolutionY)
 
-    //then, finally, calculates the normal
+    //then calculates the normal
     normal = (p1.x - p0.x) * (p2.y - p0.y) - (p1.y - p0.y) * (p2.x - p0.x)
   }
 

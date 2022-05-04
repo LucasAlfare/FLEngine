@@ -2,8 +2,61 @@ package lucasalfare.basicappengine.math
 
 import kotlin.math.cos
 import kotlin.math.sin
+import kotlin.math.sqrt
 
-class Vector3(var x: Double = 0.0, var y: Double = 0.0, var z: Double = 0.0) {
+class Vector3(
+  var x: Double = 0.0,
+  var y: Double = 0.0,
+  var z: Double = 0.0
+) {
+
+  fun euclideanLength() = sqrt((x * x) + (y * y) + (z * z))
+
+  /**
+   * Returns the dot product between this vector and the param {@code v}.
+   */
+  fun dotProduct(v: Vector3) = (x * v.x) + (y * v.y) + (z * v.z)
+
+  /**
+   * Returns the cross product between this vector and the param {@code v}.
+   */
+  fun crossProduct(v: Vector3) = Vector3(
+    x = y * v.z - z * v.y,
+    y = z * v.x - x * v.z,
+    z = x * v.y - y * v.x
+  )
+
+  /**
+   * Performs vector addition operation between this vector and the param {@code v} and,
+   * stores the result in this instance and returns itself.
+   */
+  fun add(v: Vector3) = Vector3(
+    x = x + v.x,
+    y = y + v.y,
+    z = z + v.z
+  )
+
+  /**
+   * Performs vector subtraction operation between this vector and the param {@code v}
+   * and, stores the result in this instance and returns itself.
+   */
+  fun subtract(v: Vector3) = Vector3(
+    x = x - v.x,
+    y = y - v.y,
+    z = z - v.z
+  )
+
+  /**
+   * Normalizes this vector and returns itself.
+   *
+   * A normalized vector is a vector with its values padded in order to match Euclidean Length
+   * of 1.
+   */
+  fun normalized(): Vector3 {
+    val len2 = euclideanLength()
+    if (len2 == 0.0 || len2 == 1.0) return this
+    return scale(1.0 / sqrt(len2))
+  }
 
   fun translateTo(translation: Vector3) = Vector3(
     x = x + translation.x,
@@ -17,23 +70,22 @@ class Vector3(var x: Double = 0.0, var y: Double = 0.0, var z: Double = 0.0) {
     z = z * scalar
   )
 
-  // Rotation matrix: https://en.wikipedia.org/wiki/Rotation_matrix
-  fun rotate(rotation: Vector3) = Vector3(
-    x = x * (cos(rotation.z) * cos(rotation.y)) +
-            y * (cos(rotation.z) * sin(rotation.y) * sin(rotation.x) -
-            sin(rotation.z) * cos(rotation.x)) +
-            z * (cos(rotation.z) * sin(rotation.y) * cos(rotation.x) +
-            sin(rotation.z) * sin(rotation.x)),
+  fun rotate(rotationPoint: Vector3) = Vector3(
+    x = x * (cos(rotationPoint.z) * cos(rotationPoint.y)) +
+            y * (cos(rotationPoint.z) * sin(rotationPoint.y) * sin(rotationPoint.x) -
+            sin(rotationPoint.z) * cos(rotationPoint.x)) +
+            z * (cos(rotationPoint.z) * sin(rotationPoint.y) * cos(rotationPoint.x) +
+            sin(rotationPoint.z) * sin(rotationPoint.x)),
 
-    y = x * (sin(rotation.z) * cos(rotation.y)) +
-            y * (sin(rotation.z) * sin(rotation.y) * sin(rotation.x) +
-            cos(rotation.z) * cos(rotation.x)) +
-            z * (sin(rotation.z) * sin(rotation.y) * cos(rotation.x) -
-            cos(rotation.z) * sin(rotation.x)),
+    y = x * (sin(rotationPoint.z) * cos(rotationPoint.y)) +
+            y * (sin(rotationPoint.z) * sin(rotationPoint.y) * sin(rotationPoint.x) +
+            cos(rotationPoint.z) * cos(rotationPoint.x)) +
+            z * (sin(rotationPoint.z) * sin(rotationPoint.y) * cos(rotationPoint.x) -
+            cos(rotationPoint.z) * sin(rotationPoint.x)),
 
-    z = x * (-sin(rotation.y)) +
-            y * (cos(rotation.y) * sin(rotation.x)) +
-            z * (cos(rotation.y) * cos(rotation.x))
+    z = x * (-sin(rotationPoint.y)) +
+            y * (cos(rotationPoint.y) * sin(rotationPoint.x)) +
+            z * (cos(rotationPoint.y) * cos(rotationPoint.x))
   )
 
   fun toPerspective() = Vector3(
@@ -46,4 +98,16 @@ class Vector3(var x: Double = 0.0, var y: Double = 0.0, var z: Double = 0.0) {
     x = x + (width / 2),
     y = y + (height / 2)
   )
+
+  /**
+   * Returns the distance between this vector and the vector of the param.
+   */
+  fun distance(v: Vector3): Double {
+    val deltaX = v.x - x
+    val deltaY = v.y - y
+    val deltaZ = v.z - z
+    return sqrt((deltaX * deltaX) + (deltaY * deltaY) + (deltaZ * deltaZ))
+  }
+
+  override fun toString() = "[$x, $y, $z]"
 }
