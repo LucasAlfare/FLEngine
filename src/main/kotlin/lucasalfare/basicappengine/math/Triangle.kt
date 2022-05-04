@@ -110,42 +110,4 @@ data class Triangle(
 
     renderer.g2d.draw(p)
   }
-
-//  private fun rasterizeFlatBottom(v1: Vector3, v2: Vector3, v3: Vector3, renderer: Renderer) {
-//    val inverseSlope1 = (v2.x - v1.x) / (v2.y - v1.y)
-//    val inverseSlope2 = (v3.x - v1.x) / (v3.y - v1.y)
-//    val p = Path2D.Double()
-//    var currX1 = v1.x
-//    var currX2 = v1.x
-//    var scanLineY = v1.y
-//    while (scanLineY <= v2.y) {
-//      p.moveTo(currX1, scanLineY)
-//      p.lineTo(currX2, scanLineY)
-//
-//      currX1 += inverseSlope1
-//      currX2 += inverseSlope2
-//
-//      scanLineY++
-//    }
-//    renderer.g2d.draw(p)
-//  }
-
-//  private fun rasterizeFlatTop(v1: Vector3, v2: Vector3, v3: Vector3, renderer: Renderer) {
-//    val inverseSlope1 = ((v3.x - v1.x) / (v3.y - v1.y))
-//    val inverseSlope2 = ((v3.x - v2.x) / (v3.y - v2.y))
-//    val p = Path2D.Double()
-//    var currX1 = v3.x
-//    var currX2 = v3.x
-//    var scanLineY = v3.y
-//    while (scanLineY > v1.y) {
-//      p.moveTo(currX1, scanLineY)
-//      p.lineTo(currX2, scanLineY)
-//
-//      currX1 -= inverseSlope1
-//      currX2 -= inverseSlope2
-//
-//      scanLineY--
-//    }
-//    renderer.g2d.draw(p)
-//  }
 }
