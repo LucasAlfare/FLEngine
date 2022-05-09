@@ -1,12 +1,13 @@
-package lucasalfare.basicappengine.math
+package lucasalfare.basicappengine.math.geometry
 
 import lucasalfare.basicappengine.graphics.Renderer
+import lucasalfare.basicappengine.math.Vector3
 
 open class Mesh(
-  var triangles: Array<Triangle> = arrayOf(),
-  var position: Vector3 = Vector3(),
-  var rotation: Vector3 = Vector3(),
-  var scaleFactor: Double = 1.0
+    var triangles: Array<Triangle> = arrayOf(),
+    var position: Vector3 = Vector3(),
+    var rotation: Vector3 = Vector3(),
+    var scale: Double = 1.0
 ) {
 
   private val drawTriangles = Array(triangles.size) { Triangle() }
@@ -19,11 +20,11 @@ open class Mesh(
         source = originalTriangle,
         rotation = rotation,
         position = position,
-        scaleFactor = scaleFactor
+        scaleFactor = scale
       )
     }
 
-    drawTriangles.sortBy { it.averageZ }
+    //drawTriangles.sortBy { it.averageZ }
   }
 
   fun render(renderer: Renderer) {

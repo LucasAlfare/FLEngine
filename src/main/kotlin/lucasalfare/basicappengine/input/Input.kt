@@ -1,19 +1,25 @@
-package lucasalfare.basicappengine.graphics
+package lucasalfare.basicappengine.input
 
+import lucasalfare.basicappengine.graphics.Engine
+import java.awt.Component
 import java.awt.Point
 import java.awt.event.*
 
-class Input(private val engine: Engine) : KeyListener, MouseListener, MouseMotionListener, MouseWheelListener {
+class Input(targetInputListenable: Component, var rootScale: Float):
+  KeyListener,
+  MouseListener,
+  MouseMotionListener,
+  MouseWheelListener {
 
   private var mouseMoving = false
 
   init {
     mousePoint = Point(Companion.mouseX, Companion.mouseY)
-    engine.window.canvas.addKeyListener(this)
-    engine.window.canvas.addMouseListener(this)
-    engine.window.canvas.addMouseMotionListener(this)
-    engine.window.canvas.addMouseWheelListener(this)
-    engine.window.canvas.requestFocus()
+    targetInputListenable.addKeyListener(this)
+    targetInputListenable.addMouseListener(this)
+    targetInputListenable.addMouseMotionListener(this)
+    targetInputListenable.addMouseWheelListener(this)
+    targetInputListenable.requestFocus()
   }
 
   fun update() {
@@ -53,16 +59,16 @@ class Input(private val engine: Engine) : KeyListener, MouseListener, MouseMotio
   }
 
   override fun mouseDragged(e: MouseEvent) {
-    Companion.mouseX = (e.x / engine.scale).toInt()
-    Companion.mouseY = (e.y / engine.scale).toInt()
+    Companion.mouseX = (e.x / rootScale).toInt()
+    Companion.mouseY = (e.y / rootScale).toInt()
     mousePoint.x = Companion.mouseX
     mousePoint.y = Companion.mouseY
     mouseMoving = true
   }
 
   override fun mouseMoved(e: MouseEvent) {
-    Companion.mouseX = (e.x / engine.scale).toInt()
-    Companion.mouseY = (e.y / engine.scale).toInt()
+    Companion.mouseX = (e.x / rootScale).toInt()
+    Companion.mouseY = (e.y / rootScale).toInt()
     mousePoint.x = Companion.mouseX
     mousePoint.y = Companion.mouseY
     mouseMoving = true

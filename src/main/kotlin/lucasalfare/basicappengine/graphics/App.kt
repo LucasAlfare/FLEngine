@@ -1,6 +1,6 @@
 package lucasalfare.basicappengine.graphics
 
-abstract class AbstractApp {
+abstract class App {
   private var last: Long = 0
 
   @Volatile

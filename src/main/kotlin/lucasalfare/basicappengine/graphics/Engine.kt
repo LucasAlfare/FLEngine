@@ -1,10 +1,13 @@
 package lucasalfare.basicappengine.graphics
 
-class Engine(private val application: AbstractApp) : Runnable {
+import lucasalfare.basicappengine.input.Input
+
+class Engine(private val application: App) : Runnable {
 
   var width = 0
   var height = 0
   var scale = 1f
+
   private var frames = 0
   private var updates = 0
   private var isRunning = false
@@ -14,9 +17,9 @@ class Engine(private val application: AbstractApp) : Runnable {
   private lateinit var input: Input
 
   fun start() {
-    window = Window(this)
-    renderer = Renderer(this)
-    input = Input(this)
+    window = Window(width, height, scale)
+    renderer = Renderer(window.renderingImage)
+    input = Input(window.canvas, scale)
     init()
     val t = Thread(this)
     t.start()
@@ -44,11 +47,10 @@ class Engine(private val application: AbstractApp) : Runnable {
       }
 
       //then render here
-      renderGame()
+      render()
 
       //helper to measure some rates per second
       if (System.currentTimeMillis() - auxTimer >= 1000) {
-        window.frame.title = "$frames FPS | $updates UPS"
         frames = 0
         updates = 0
         auxTimer = System.currentTimeMillis()
@@ -57,15 +59,15 @@ class Engine(private val application: AbstractApp) : Runnable {
   }
 
   private fun update() {
-    application.updateWithInternalDelta(this)
     input.update()
+    application.updateWithInternalDelta(this)
     updates++
   }
 
-  private fun renderGame() {
+  private fun render() {
     renderer.clear()
     application.render(this, renderer)
-    window.render()
+    window.render(frames, updates)
     frames++
   }
 

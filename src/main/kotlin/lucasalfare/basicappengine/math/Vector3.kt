@@ -10,6 +10,8 @@ class Vector3(
   var z: Double = 0.0
 ) {
 
+  constructor(x: Int, y: Int, z: Int) : this(x.toDouble(), y.toDouble(), z.toDouble())
+
   fun euclideanLength() =
     sqrt((x * x) + (y * y) + (z * z))
 

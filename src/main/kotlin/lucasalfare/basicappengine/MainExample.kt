@@ -1,8 +1,9 @@
 package lucasalfare.basicappengine
 
 import lucasalfare.basicappengine.graphics.*
-import lucasalfare.basicappengine.math.Mesh
-import lucasalfare.basicappengine.math.Triangle
+import lucasalfare.basicappengine.input.Input
+import lucasalfare.basicappengine.math.geometry.Mesh
+import lucasalfare.basicappengine.math.geometry.Triangle
 import lucasalfare.basicappengine.math.Vector3
 import java.awt.Color
 import java.awt.event.KeyEvent
@@ -18,7 +19,7 @@ private val f = Vector3(-1.0, 1.0, 1.0)
 private val g = Vector3(-1.0, -1.0, 1.0)
 private val h = Vector3(1.0, -1.0, 1.0)
 
-class MainExample : AbstractApp() {
+class MainExample : App() {
 
   private val cube = Mesh(
     triangles = arrayOf(
@@ -40,7 +41,7 @@ class MainExample : AbstractApp() {
       Triangle(p0 = d, p1 = c, p2 = g, color = Color.YELLOW),
       Triangle(p0 = g, p1 = c, p2 = h, color = Color.YELLOW)
     ),
-    scaleFactor = 100.0
+    scale = 100.0
   )
 
   override fun init(engine: Engine) {

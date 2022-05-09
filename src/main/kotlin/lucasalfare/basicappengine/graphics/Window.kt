@@ -5,19 +5,25 @@ import java.awt.image.BufferStrategy
 import java.awt.image.BufferedImage
 import javax.swing.JFrame
 
-class Window(engine: Engine) {
-  val frame: JFrame
-  val image: BufferedImage
+class Window(
+  width: Int,
+  height: Int,
+  scale: Float
+) {
+  val renderingImage: BufferedImage
   val canvas: Canvas
+
+  private var title = "Application"
+  private val frame: JFrame
 
   private val strategy: BufferStrategy
   private val rootWindowGraphics: Graphics //aux to draw the main image of the window
 
   init {
-    image = toCompatibleImage(BufferedImage(engine.width, engine.height, BufferedImage.TYPE_INT_RGB))
+    renderingImage = toCompatibleImage(BufferedImage(width, height, BufferedImage.TYPE_INT_RGB))
     canvas = Canvas()
-    val canvasWidth = (engine.width * engine.scale).toInt()
-    val canvasHeight = (engine.height * engine.scale).toInt()
+    val canvasWidth = (width * scale).toInt()
+    val canvasHeight = (height * scale).toInt()
     val windowDimension = Dimension(canvasWidth, canvasHeight)
     frame = JFrame("Application")
     frame.defaultCloseOperation = JFrame.EXIT_ON_CLOSE
@@ -38,9 +44,10 @@ class Window(engine: Engine) {
     rootWindowGraphics = strategy.drawGraphics
   }
 
-  fun render() {
-    rootWindowGraphics.drawImage(image, 0, 0, canvas.width, canvas.height, null)
+  fun render(fps: Int, ups: Int) {
+    rootWindowGraphics.drawImage(renderingImage, 0, 0, canvas.width, canvas.height, null)
     strategy.show()
+    frame.title = "$title | $fps FPS, $ups UPS"
   }
 
   //source: https://stackoverflow.com/a/197060/4563960

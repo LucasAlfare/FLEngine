@@ -1,8 +1,9 @@
-package lucasalfare.basicappengine.math
+package lucasalfare.basicappengine.math.geometry
 
 import lucasalfare.basicappengine.graphics.Renderer
 import lucasalfare.basicappengine.graphics.ResolutionX
 import lucasalfare.basicappengine.graphics.ResolutionY
+import lucasalfare.basicappengine.math.Vector3
 import java.awt.Color
 import java.awt.geom.Path2D
 
@@ -11,22 +12,21 @@ import java.awt.geom.Path2D
  * order consistently.
  */
 data class Triangle(
-  var p0: Vector3 = Vector3(),
-  var p1: Vector3 = Vector3(),
-  var p2: Vector3 = Vector3(),
-  var color: Color = Color.WHITE
+    var p0: Vector3 = Vector3(),
+    var p1: Vector3 = Vector3(),
+    var p2: Vector3 = Vector3(),
+    var color: Color = Color.WHITE
 ) {
 
-  var averageZ = 0.0
   var normal = 0.0
 
   private val vertices = Array(3) { Vector3() }
 
   fun update(
-    source: Triangle,
-    position: Vector3 = Vector3(),
-    rotation: Vector3 = Vector3(),
-    scaleFactor: Double = 1.0
+      source: Triangle,
+      position: Vector3 = Vector3(),
+      rotation: Vector3 = Vector3(),
+      scaleFactor: Double = 1.0
   ) {
     color = source.color
 
@@ -34,9 +34,6 @@ data class Triangle(
     p0 = source.p0.rotate(rotation).translateTo(position).scale(scaleFactor)
     p1 = source.p1.rotate(rotation).translateTo(position).scale(scaleFactor)
     p2 = source.p2.rotate(rotation).translateTo(position).scale(scaleFactor)
-
-    //calculate averageZ before other stuff
-    averageZ = (p0.z + p1.z + p2.z) / 3
 
     //apply perspective
     p0 = p0.toPerspective().centerInBound(ResolutionX, ResolutionY)
@@ -53,7 +50,7 @@ data class Triangle(
   }
 
   fun render(renderer: Renderer) {
-    renderer.g2d.color = color
+    renderer.g.color = color
     rasterize(renderer)
   }
 
@@ -82,6 +79,7 @@ data class Triangle(
       val inverseSlope2 = ((v3.x - v2.x) / (v3.y - v2.y))
       var currX1 = v3.x
       var currX2 = v3.x
+
       var scanLineY = v3.y
       while (scanLineY > v1.y) {
         p.moveTo(currX1, scanLineY)
@@ -108,6 +106,6 @@ data class Triangle(
       rasterizeFlatBottom(vertices[0], vertices[1], vertex4)
     }
 
-    renderer.g2d.draw(p)
+    renderer.g.draw(p)
   }
 }
