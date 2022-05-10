@@ -1,5 +1,6 @@
 package lucasalfare.basicappengine.graphics
 
+import lucasalfare.basicappengine.AbstractApp
 import lucasalfare.basicappengine.input.Input
 
 @Suppress("SameParameterValue")

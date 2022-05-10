@@ -1,6 +1,6 @@
-package lucasalfare.basicappengine.graphics
+package lucasalfare.basicappengine
 
-import lucasalfare.basicappengine.Handleable
+import lucasalfare.basicappengine.graphics.Renderer
 
 /**
  * The application type that can be handled by the [Engine] class.
