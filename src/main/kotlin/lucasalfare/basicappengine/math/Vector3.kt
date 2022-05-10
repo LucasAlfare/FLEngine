@@ -13,7 +13,7 @@ class Vector3(
 
   constructor(x: Int, y: Int, z: Int) : this(x.toDouble(), y.toDouble(), z.toDouble())
 
-  fun euclideanLength() =
+  fun length() =
     sqrt((x * x) + (y * y) + (z * z))
 
   /**
@@ -58,7 +58,7 @@ class Vector3(
    * of 1.
    */
   fun normalized(): Vector3 {
-    val len2 = euclideanLength()
+    val len2 = length()
     if (len2 == 0.0 || len2 == 1.0) return this
     return scale(1.0 / sqrt(len2))
   }

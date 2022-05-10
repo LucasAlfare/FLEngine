@@ -49,7 +49,7 @@ class MyApp(title: String) : AbstractApp(title) {
       Triangle(p0 = d, p1 = c, p2 = g, color = Color.YELLOW),
       Triangle(p0 = g, p1 = c, p2 = h, color = Color.YELLOW)
     ),
-    scale = 50.0
+    scale = 100.0
   )
 
   private val plane = Mesh(
@@ -76,7 +76,7 @@ class MyApp(title: String) : AbstractApp(title) {
     val timeStep = args[0] as Float
 
     cube.update()
-    cube.position.y += 1 * timeStep
+    cube.rotation.y += 1 * timeStep
   }
 
   override fun render(renderer: Renderer) {

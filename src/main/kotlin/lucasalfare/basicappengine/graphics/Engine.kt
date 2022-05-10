@@ -46,7 +46,7 @@ class Engine(private val app: AbstractApp) : Runnable {
         window.update(frames, updates)
         frames = 0
         updates = 0
-        Thread.sleep(500)
+        Thread.sleep(1000)
       }
     }
 

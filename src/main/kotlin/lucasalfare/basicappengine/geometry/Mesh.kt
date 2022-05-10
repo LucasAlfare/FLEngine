@@ -27,7 +27,7 @@ class Mesh(
 
   override fun render(renderer: Renderer) {
     triangles.forEach {
-      if (it.normal < 0) {
+      if (it.crossProductLength < 0) {
         it.render(renderer)
       }
     }

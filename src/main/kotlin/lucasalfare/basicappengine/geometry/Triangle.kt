@@ -17,7 +17,7 @@ class Triangle(
   var color: Color
 ): Handleable {
 
-  var normal = 0.0
+  var crossProductLength = 0.0
 
   private val transformedPoints =
     Array(3) { Vector3() }
@@ -53,8 +53,8 @@ class Triangle(
     b = b.toPerspective().centerInBound(ResolutionX, ResolutionY)
     c = c.toPerspective().centerInBound(ResolutionX, ResolutionY)
 
-    // then calculates the normal
-    normal = (b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x)
+    // then calculates the length of the cross product between to vectors
+    crossProductLength = (b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x)
 
     /*
     also, always sorts the points by Y value, helper to rasterize;
@@ -142,6 +142,6 @@ class Triangle(
             "p1=$p1, " +
             "p2=$p2, " +
             "color=$color, " +
-            "normal=$normal, " +
+            "normal=$crossProductLength, " +
             "transformedPoints=${transformedPoints.contentToString()})"
 }
