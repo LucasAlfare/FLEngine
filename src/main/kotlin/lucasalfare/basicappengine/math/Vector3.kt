@@ -17,13 +17,13 @@ class Vector3(
     sqrt((x * x) + (y * y) + (z * z))
 
   /**
-   * Returns the dot product between this vector and the param {@code v}.
+   * Returns the dot product between this vector and the param [v].
    */
   fun dotProduct(v: Vector3) =
     (x * v.x) + (y * v.y) + (z * v.z)
 
   /**
-   * Returns the cross product between this vector and the param {@code v}.
+   * Returns the cross product between this vector and the param [v].
    */
   fun crossProduct(v: Vector3) = Vector3(
     x = y * v.z - z * v.y,
@@ -32,7 +32,7 @@ class Vector3(
   )
 
   /**
-   * Performs vector addition operation between this vector and the param {@code v} and,
+   * Performs vector addition operation between this vector and the param [v] and,
    * stores the result in this instance and returns itself.
    */
   fun add(v: Vector3) = Vector3(
@@ -42,7 +42,7 @@ class Vector3(
   )
 
   /**
-   * Performs vector subtraction operation between this vector and the param {@code v}
+   * Performs vector subtraction operation between this vector and the param [v]
    * and, stores the result in this instance and returns itself.
    */
   fun subtract(v: Vector3) = Vector3(
@@ -63,7 +63,7 @@ class Vector3(
     return scale(1.0 / sqrt(len2))
   }
 
-  fun translateTo(translation: Vector3) = Vector3(
+  fun translate(translation: Vector3) = Vector3(
     x = x + translation.x,
     y = y + translation.y,
     z = z + translation.z
@@ -105,7 +105,7 @@ class Vector3(
   )
 
   /**
-   * Returns the distance between this vector and the vector of the param.
+   * Returns the distance between this vector and the vector of the param [v].
    */
   fun distance(v: Vector3): Double {
     val deltaX = v.x - x

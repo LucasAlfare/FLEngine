@@ -54,8 +54,6 @@ class MyApp(title: String) : AbstractApp(title) {
     scale = 50.0
   )
 
-  //Vector3(-1,0, 1)
-
   private val plane = Mesh(
     triangles = arrayOf(
       Triangle(
@@ -76,19 +74,9 @@ class MyApp(title: String) : AbstractApp(title) {
 
   }
 
-  override fun update(step: Float) {
+  override fun update(time: Float) {
     cube.update()
-    cube.rotation.y += 1 * step
-
-    plane.update()
-
-    if (Input.isKey(KeyEvent.VK_PLUS)) {
-      plane.position.y -= 2 * step
-      println(plane.position)
-    } else if (Input.isKey(KeyEvent.VK_MINUS)) {
-      plane.position.y += 2 * step
-      println(plane.position)
-    }
+    cube.position.y += 1 * time
   }
 
   override fun render(renderer: Renderer) {

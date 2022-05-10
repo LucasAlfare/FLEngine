@@ -20,6 +20,11 @@ class Renderer(var targetImage: BufferedImage) {
    */
   var transparentColor: Int = Color.MAGENTA.rgb
 
+  /**
+   * Field to store a REFERENCE to the actual real pixel info, from the target image.
+   *
+   * Modifying this array automatically affects the target image.
+   */
   private var pixelData: IntArray = (targetImage.raster.dataBuffer as DataBufferInt).data
 
   fun clear() {
@@ -33,26 +38,14 @@ class Renderer(var targetImage: BufferedImage) {
    * - the pixel coordinate is inside the image bounds;
    * - the color passed is not equals to the [transparentColor] value.
    */
-  fun setPixel(x: Int, y: Int, value: Int): Boolean {
-    if (
-      (x < 0) ||
-      (x >= targetImage.width) ||
-      (y < 0) ||
-      (y >= targetImage.height) ||
-      (value == transparentColor)
-    ) {
-      return false
-    }
-
+  fun setPixel(x: Int, y: Int, value: Int) {
+    if (!coordInBounds(x, y) || value == transparentColor) return
     pixelData[x + y * targetImage.width] = value
-    return true
   }
 
-  fun getPixel(x: Int, y: Int): Int {
-    return if (x < 0 || x >= targetImage.width || y < 0 || y >= targetImage.height) {
-      -1
-    } else pixelData[x + y * targetImage.width]
-  }
+  fun getPixel(x: Int, y: Int) =
+    if (!coordInBounds(x, y)) -1
+    else pixelData[x + y * targetImage.width]
 
   /**
    * Basic function to draw line between two points.
@@ -97,4 +90,8 @@ class Renderer(var targetImage: BufferedImage) {
       }
     }
   }
+
+  private fun coordInBounds(x: Int, y: Int) =
+    (x >= 0) && (x < targetImage.width) &&
+    (y >= 0) && (y < targetImage.height)
 }

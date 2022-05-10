@@ -3,7 +3,11 @@ package lucasalfare.basicappengine.math.geometry
 import lucasalfare.basicappengine.graphics.Renderer
 import lucasalfare.basicappengine.math.Vector3
 
-open class Mesh(
+/**
+ * Class used to hold triangles that can represent an
+ * 3D shape, such as Cubes, Planes, Characters.
+ */
+class Mesh(
     var triangles: Array<Triangle>,
     var position: Vector3 = Vector3(),
     var rotation: Vector3 = Vector3(),
@@ -11,13 +15,13 @@ open class Mesh(
 ) {
 
   fun update() {
-    triangles.forEach {
-      it.update(
-        rotation = rotation,
-        position = position,
-        scale = scale
-      )
-    }
+    /*
+    all triangles of this mesh are updated based
+    in the same transformation supplied to this
+    instance, then the final mesh draw can be
+    consistent
+    */
+    triangles.forEach { it.update(position, rotation, scale) }
   }
 
   fun render(renderer: Renderer) {
