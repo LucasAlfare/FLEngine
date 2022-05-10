@@ -1,5 +1,6 @@
-package lucasalfare.basicappengine.math.geometry
+package lucasalfare.basicappengine.geometry
 
+import lucasalfare.basicappengine.Handleable
 import lucasalfare.basicappengine.graphics.Renderer
 import lucasalfare.basicappengine.graphics.ResolutionX
 import lucasalfare.basicappengine.graphics.ResolutionY
@@ -14,7 +15,7 @@ class Triangle(
   var p1: Vector3,
   var p2: Vector3,
   var color: Color
-) {
+): Handleable {
 
   var normal = 0.0
 
@@ -37,7 +38,11 @@ class Triangle(
    * which is replacing the classical "matrix multiplication", which
    * usually is used in this case/step.
    * */
-  fun update(position: Vector3, rotation: Vector3, scale: Double) {
+  override fun update(vararg args: Any) {
+    val position = args[0] as Vector3
+    val rotation = args[1] as Vector3
+    val scale = args[2] as Double
+
     // first transforms (store results in separate fields)
     a = p0
       .translate(position).rotate(rotation).scale(scale)
@@ -64,7 +69,7 @@ class Triangle(
     transformedPoints.sortBy { it.y }
   }
 
-  fun render(renderer: Renderer) {
+  override fun render(renderer: Renderer) {
     rasterize(renderer)
   }
 
@@ -73,8 +78,8 @@ class Triangle(
    */
   private fun rasterize(renderer: Renderer) {
     /*
-    retrieves the points to the right order,
-    after sorting then in the previous update
+    back the points to the sorted order, after
+    sorting then in the previous update
     */
     a = transformedPoints[0]
     b = transformedPoints[1]
@@ -135,5 +140,11 @@ class Triangle(
   }
 
   override fun toString() =
-    "Triangle(p0=$p0, p1=$p1, p2=$p2, color=$color, normal=$normal, transformedPoints=${transformedPoints.contentToString()})"
+    "Triangle(" +
+            "p0=$p0, " +
+            "p1=$p1, " +
+            "p2=$p2, " +
+            "color=$color, " +
+            "normal=$normal, " +
+            "transformedPoints=${transformedPoints.contentToString()})"
 }

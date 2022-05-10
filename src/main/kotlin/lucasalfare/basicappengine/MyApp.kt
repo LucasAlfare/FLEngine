@@ -5,12 +5,10 @@ package lucasalfare.basicappengine
  * own engine API.
  */
 import lucasalfare.basicappengine.graphics.*
-import lucasalfare.basicappengine.input.Input
-import lucasalfare.basicappengine.math.geometry.Mesh
-import lucasalfare.basicappengine.math.geometry.Triangle
 import lucasalfare.basicappengine.math.Vector3
+import lucasalfare.basicappengine.geometry.Mesh
+import lucasalfare.basicappengine.geometry.Triangle
 import java.awt.Color
-import java.awt.event.KeyEvent
 
 /**
  * Only auxiliary fields to store points to the cube mesh.
@@ -74,9 +72,11 @@ class MyApp(title: String) : AbstractApp(title) {
 
   }
 
-  override fun update(time: Float) {
+  override fun update(vararg args: Any) {
+    val timeStep = args[0] as Float
+
     cube.update()
-    cube.position.y += 1 * time
+    cube.position.y += 1 * timeStep
   }
 
   override fun render(renderer: Renderer) {

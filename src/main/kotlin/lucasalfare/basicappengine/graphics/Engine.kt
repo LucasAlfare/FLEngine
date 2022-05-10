@@ -11,26 +11,26 @@ class Engine(private val app: AbstractApp) : Runnable {
 
   private var frames = 0
   private var updates = 0
-  lateinit var window: Window
 
+  private lateinit var window: Window
   private lateinit var renderer: Renderer
   private lateinit var input: Input
 
   private lateinit var ratesMeasurementHelper: Thread
   private lateinit var mainThread: Thread
 
+  /**
+   * Initializes all needed fields and
+   * stars the application loop.
+   */
   fun start() {
-    window = Window(
-      width = width,
-      height = height,
-      scale = scale
-    )
+    window = Window(width, height, scale)
 
     renderer = Renderer(targetImage = window.renderingImage)
 
     input = Input(
       inputEventsGenerator = window.canvas,
-      customScale = scale
+      customScalingFactor = scale
     )
 
     mainThread = Thread(this)
@@ -45,7 +45,7 @@ class Engine(private val app: AbstractApp) : Runnable {
         window.update(frames, updates)
         frames = 0
         updates = 0
-        Thread.sleep(1000)
+        Thread.sleep(500)
       }
     }
 
@@ -56,6 +56,11 @@ class Engine(private val app: AbstractApp) : Runnable {
   }
 
 
+  /**
+   * Runs a simple fixed time step loop.
+   *
+   * TODO: consider abstract the loop type in order to implement different types of loops.
+   */
   override fun run() {
     val rate = 1f / 60f
     var accumulator = 0f
@@ -76,12 +81,18 @@ class Engine(private val app: AbstractApp) : Runnable {
     }
   }
 
+  /**
+   * Abstracts all update stuff.
+   */
   private fun update(step: Float) {
     input.update()
     app.update(step)
     updates++
   }
 
+  /**
+   * Abstracts all rendering stuff.
+   */
   private fun render() {
     renderer.clear()
     app.render(renderer)

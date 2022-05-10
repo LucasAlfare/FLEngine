@@ -26,9 +26,9 @@ class Vector3(
    * Returns the cross product between this vector and the param [v].
    */
   fun crossProduct(v: Vector3) = Vector3(
-    x = y * v.z - z * v.y,
-    y = z * v.x - x * v.z,
-    z = x * v.y - y * v.x
+    x = (y * v.z) - (z * v.y),
+    y = (z * v.x) - (x * v.z),
+    z = (x * v.y) - (y * v.x)
   )
 
   /**

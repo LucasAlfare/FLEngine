@@ -6,7 +6,7 @@ import java.awt.event.*
 
 class Input(
   inputEventsGenerator: Component,
-  private var customScale: Float = 1f
+  private var customScalingFactor: Float = 1f
 ) : KeyListener,
   MouseListener,
   MouseMotionListener,
@@ -62,16 +62,16 @@ class Input(
   }
 
   override fun mouseDragged(e: MouseEvent) {
-    Companion.mouseX = (e.x / customScale).toInt()
-    Companion.mouseY = (e.y / customScale).toInt()
+    Companion.mouseX = (e.x / customScalingFactor).toInt()
+    Companion.mouseY = (e.y / customScalingFactor).toInt()
     mousePoint.x = Companion.mouseX
     mousePoint.y = Companion.mouseY
     mouseMoving = true
   }
 
   override fun mouseMoved(e: MouseEvent) {
-    Companion.mouseX = (e.x / customScale).toInt()
-    Companion.mouseY = (e.y / customScale).toInt()
+    Companion.mouseX = (e.x / customScalingFactor).toInt()
+    Companion.mouseY = (e.y / customScalingFactor).toInt()
     mousePoint.x = Companion.mouseX
     mousePoint.y = Companion.mouseY
     mouseMoving = true

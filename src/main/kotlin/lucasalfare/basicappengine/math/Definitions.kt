@@ -1,11 +1,12 @@
 package lucasalfare.basicappengine.math
 
-import lucasalfare.basicappengine.graphics.FieldOfView
-import lucasalfare.basicappengine.graphics.Renderer
+
 import lucasalfare.basicappengine.graphics.ResolutionX
 import lucasalfare.basicappengine.graphics.ResolutionY
 import kotlin.math.PI
 import kotlin.math.tan
+
+var FieldOfView = 45.0
 
 fun getAspectRatio() = ResolutionY / ResolutionX
 
