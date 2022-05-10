@@ -1,5 +1,6 @@
 package lucasalfare.basicappengine.graphics
 
+import java.awt.Color
 import java.awt.Graphics2D
 import java.awt.image.BufferedImage
 import java.awt.image.DataBufferInt
@@ -7,54 +8,93 @@ import java.util.*
 import kotlin.math.abs
 
 @Suppress("MemberVisibilityCanBePrivate")
-class Renderer(targetImage: BufferedImage) {
+class Renderer(var targetImage: BufferedImage) {
 
-  var g: Graphics2D
+  /**
+   * Color used to reset pixels values when clearing.
+   */
+  var clearColor: Int = Color.BLACK.rgb
 
-  private val width: Int
-  private val height: Int
+  /**
+   * This color is not considered when trying to set pixels individually.
+   */
+  var transparentColor: Int = Color.MAGENTA.rgb
 
-  private var pixelData: IntArray
+  private var pixelData: IntArray = (targetImage.raster.dataBuffer as DataBufferInt).data
 
-  var clearColor = 0x00_00_00
-
-  init {
-    pixelData = (targetImage.raster.dataBuffer as DataBufferInt).data
-    g = targetImage.createGraphics()
-    width = targetImage.width
-    height = targetImage.height
-  }
-
-  fun clear(clearColor: Int = this.clearColor) {
-    if (clearColor != this.clearColor) this.clearColor = clearColor
+  fun clear() {
     Arrays.fill(pixelData, clearColor)
   }
 
+  /**
+   * Sets a single pixel in the buffer image to the given color.
+   *
+   * The pixel is set only if:
+   * - the pixel coordinate is inside the image bounds;
+   * - the color passed is not equals to the [transparentColor] value.
+   */
   fun setPixel(x: Int, y: Int, value: Int): Boolean {
     if (
       (x < 0) ||
-      (x >= width) ||
+      (x >= targetImage.width) ||
       (y < 0) ||
-      (y >= height) ||
-      (value == -0xff01)
+      (y >= targetImage.height) ||
+      (value == transparentColor)
     ) {
       return false
     }
 
-    pixelData[x + y * width] = value
+    pixelData[x + y * targetImage.width] = value
     return true
   }
 
   fun getPixel(x: Int, y: Int): Int {
-    return if (x < 0 || x >= width || y < 0 || y >= height) {
+    return if (x < 0 || x >= targetImage.width || y < 0 || y >= targetImage.height) {
       -1
-    } else pixelData[x + y * width]
+    } else pixelData[x + y * targetImage.width]
   }
 
-  fun drawHorizontalLine(x1: Int, x2: Int, y: Int, color: Int) {
-    val xDiff = abs(x1 - x2)
-    repeat(xDiff) {
-      setPixel(x1 + it, y, color)
+  /**
+   * Basic function to draw line between two points.
+   * This function uses the Bresemham's algorithm.
+   */
+  fun drawLine(x1: Int, y1: Int, x2: Int, y2: Int, color: Int) {
+    var d = 0
+
+    val dx = abs(x2 - x1)
+    val dy = abs(y2 - y1)
+
+    val dx2 = 2 * dx
+    val dy2 = 2 * dy
+
+    val ix = if (x1 < x2) 1 else -1
+    val iy = if (y1 < y2) 1 else -1
+
+    var x = x1
+    var y = y1
+
+    if (dx >= dy) {
+      while (true) {
+        setPixel(x, y, color)
+        if (x == x2) break
+        x += ix
+        d += dy2
+        if (d > dx) {
+          y += iy
+          d -= dx2
+        }
+      }
+    } else {
+      while (true) {
+        setPixel(x, y, color)
+        if (y == y2) break
+        y += iy
+        d += dx2
+        if (d > dy) {
+          x += ix
+          d -= dy2
+        }
+      }
     }
   }
 }

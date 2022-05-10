@@ -1,12 +1,13 @@
 package lucasalfare.basicappengine.input
 
-import lucasalfare.basicappengine.graphics.Engine
 import java.awt.Component
 import java.awt.Point
 import java.awt.event.*
 
-class Input(targetInputListenable: Component, var rootScale: Float):
-  KeyListener,
+class Input(
+  inputEventsGenerator: Component,
+  private var customScale: Float = 1f
+) : KeyListener,
   MouseListener,
   MouseMotionListener,
   MouseWheelListener {
@@ -15,11 +16,11 @@ class Input(targetInputListenable: Component, var rootScale: Float):
 
   init {
     mousePoint = Point(Companion.mouseX, Companion.mouseY)
-    targetInputListenable.addKeyListener(this)
-    targetInputListenable.addMouseListener(this)
-    targetInputListenable.addMouseMotionListener(this)
-    targetInputListenable.addMouseWheelListener(this)
-    targetInputListenable.requestFocus()
+    inputEventsGenerator.addKeyListener(this)
+    inputEventsGenerator.addMouseListener(this)
+    inputEventsGenerator.addMouseMotionListener(this)
+    inputEventsGenerator.addMouseWheelListener(this)
+    inputEventsGenerator.requestFocus()
   }
 
   fun update() {
@@ -30,7 +31,9 @@ class Input(targetInputListenable: Component, var rootScale: Float):
     lastMouseY = Companion.mouseY
   }
 
-  override fun keyTyped(e: KeyEvent) { /*--*/ }
+  override fun keyTyped(e: KeyEvent) {
+    /*--*/
+  }
 
   override fun keyPressed(e: KeyEvent) {
     keys[e.keyCode] = true
@@ -59,16 +62,16 @@ class Input(targetInputListenable: Component, var rootScale: Float):
   }
 
   override fun mouseDragged(e: MouseEvent) {
-    Companion.mouseX = (e.x / rootScale).toInt()
-    Companion.mouseY = (e.y / rootScale).toInt()
+    Companion.mouseX = (e.x / customScale).toInt()
+    Companion.mouseY = (e.y / customScale).toInt()
     mousePoint.x = Companion.mouseX
     mousePoint.y = Companion.mouseY
     mouseMoving = true
   }
 
   override fun mouseMoved(e: MouseEvent) {
-    Companion.mouseX = (e.x / rootScale).toInt()
-    Companion.mouseY = (e.y / rootScale).toInt()
+    Companion.mouseX = (e.x / customScale).toInt()
+    Companion.mouseY = (e.y / customScale).toInt()
     mousePoint.x = Companion.mouseX
     mousePoint.y = Companion.mouseY
     mouseMoving = true
@@ -86,6 +89,7 @@ class Input(targetInputListenable: Component, var rootScale: Float):
     get() = Companion.mouseScroll
 
   companion object {
+    //TODO: consider update to handle more codes from virtual keys above 256
     const val NUM_KEYS = 256
     const val NUM_BUTTONS = 5
 

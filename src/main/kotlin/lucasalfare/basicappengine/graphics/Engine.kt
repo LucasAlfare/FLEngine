@@ -2,7 +2,8 @@ package lucasalfare.basicappengine.graphics
 
 import lucasalfare.basicappengine.input.Input
 
-class Engine(private val application: App) : Runnable {
+@Suppress("SameParameterValue")
+class Engine(private val app: AbstractApp) : Runnable {
 
   var width = 0
   var height = 0
@@ -10,73 +11,86 @@ class Engine(private val application: App) : Runnable {
 
   private var frames = 0
   private var updates = 0
-  private var isRunning = false
   lateinit var window: Window
 
   private lateinit var renderer: Renderer
   private lateinit var input: Input
 
+  private lateinit var ratesMeasurementHelper: Thread
+  private lateinit var mainThread: Thread
+
   fun start() {
-    window = Window(width, height, scale)
-    renderer = Renderer(window.renderingImage)
-    input = Input(window.canvas, scale)
-    init()
-    val t = Thread(this)
-    t.start()
-  }
+    window = Window(
+      width = width,
+      height = height,
+      scale = scale
+    )
 
-  private fun init() {
-    application.init(this)
-  }
+    renderer = Renderer(targetImage = window.renderingImage)
 
-  override fun run() {
-    isRunning = true
-    val ns = 1e9 / RATE
-    var now: Long
-    var auxTimer = System.currentTimeMillis()
-    var lastTime = System.nanoTime()
-    var delta = 0f
-    while (isRunning) {
-      now = System.nanoTime()
-      delta += ((now - lastTime) / ns).toFloat()
-      lastTime = now
-      while (delta >= 1) {
-        //performs a bunch of updates
-        update()
-        delta--
-      }
+    input = Input(
+      inputEventsGenerator = window.canvas,
+      customScale = scale
+    )
 
-      //then render here
-      render()
+    mainThread = Thread(this)
 
-      //helper to measure some rates per second
-      if (System.currentTimeMillis() - auxTimer >= 1000) {
+    ratesMeasurementHelper = Thread {
+      while(true) {
+        /*
+        window title update runs in a separated
+        thread, in order to show the rates even
+        the main app loop is not running
+         */
+        window.update(frames, updates)
         frames = 0
         updates = 0
-        auxTimer = System.currentTimeMillis()
+        Thread.sleep(1000)
       }
+    }
+
+    window.title = app.title
+    app.init()
+    ratesMeasurementHelper.start()
+    mainThread.start()
+  }
+
+
+  override fun run() {
+    val rate = 1f / 60f
+    var accumulator = 0f
+    var curr: Long
+    var last = System.currentTimeMillis()
+
+    while (true) {
+      curr = System.currentTimeMillis()
+      val lastRenderTime = (curr - last) / 1000f
+      accumulator += lastRenderTime
+      last = curr
+
+      while (accumulator > rate) {
+        update(rate)
+        accumulator -= rate
+      }
+      render()
     }
   }
 
-  private fun update() {
+  private fun update(step: Float) {
     input.update()
-    application.updateWithInternalDelta(this)
+    app.update(step)
     updates++
   }
 
   private fun render() {
     renderer.clear()
-    application.render(this, renderer)
-    window.render(frames, updates)
+    app.render(renderer)
+    window.render()
     frames++
   }
 
   fun setSize(width: Int, height: Int) {
     this.width = width
     this.height = height
-  }
-
-  companion object {
-    const val RATE = 60
   }
 }

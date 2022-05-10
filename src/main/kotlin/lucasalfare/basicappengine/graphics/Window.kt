@@ -10,14 +10,12 @@ class Window(
   height: Int,
   scale: Float
 ) {
+  var title = ""
   val renderingImage: BufferedImage
   val canvas: Canvas
 
-  private var title = "Application"
   private val frame: JFrame
-
   private val strategy: BufferStrategy
-  private val rootWindowGraphics: Graphics //aux to draw the main image of the window
 
   init {
     renderingImage = toCompatibleImage(BufferedImage(width, height, BufferedImage.TYPE_INT_RGB))
@@ -25,7 +23,7 @@ class Window(
     val canvasWidth = (width * scale).toInt()
     val canvasHeight = (height * scale).toInt()
     val windowDimension = Dimension(canvasWidth, canvasHeight)
-    frame = JFrame("Application")
+    frame = JFrame(title)
     frame.defaultCloseOperation = JFrame.EXIT_ON_CLOSE
     frame.layout = BorderLayout()
     frame.add(canvas, BorderLayout.CENTER)
@@ -41,13 +39,20 @@ class Window(
     frame.pack()
     frame.setLocationRelativeTo(null)
     strategy = canvas.bufferStrategy
-    rootWindowGraphics = strategy.drawGraphics
   }
 
-  fun render(fps: Int, ups: Int) {
-    rootWindowGraphics.drawImage(renderingImage, 0, 0, canvas.width, canvas.height, null)
-    strategy.show()
+  fun update(fps: Int, ups: Int) {
     frame.title = "$title | $fps FPS, $ups UPS"
+  }
+
+  fun render() {
+    strategy.drawGraphics.drawImage(
+      renderingImage,
+      0, 0,
+      canvas.width, canvas.height,
+      null
+    )
+    strategy.show()
   }
 
   //source: https://stackoverflow.com/a/197060/4563960

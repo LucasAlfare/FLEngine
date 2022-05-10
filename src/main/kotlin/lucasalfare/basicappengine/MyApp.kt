@@ -1,5 +1,9 @@
 package lucasalfare.basicappengine
 
+/**
+ * This file demonstrates some mesh rendering using the
+ * own engine API.
+ */
 import lucasalfare.basicappengine.graphics.*
 import lucasalfare.basicappengine.input.Input
 import lucasalfare.basicappengine.math.geometry.Mesh
@@ -8,7 +12,9 @@ import lucasalfare.basicappengine.math.Vector3
 import java.awt.Color
 import java.awt.event.KeyEvent
 
-
+/**
+ * Only auxiliary fields to store points to the cube mesh.
+ */
 private val a = Vector3(-1.0, 1.0, -1.0)
 private val b = Vector3(1.0, 1.0, -1.0)
 private val c = Vector3(1.0, -1.0, -1.0)
@@ -19,7 +25,11 @@ private val f = Vector3(-1.0, 1.0, 1.0)
 private val g = Vector3(-1.0, -1.0, 1.0)
 private val h = Vector3(1.0, -1.0, 1.0)
 
-class MainExample : App() {
+/**
+ * A custom class that represents an Application that can be
+ * updated and rendered by the Engine.
+ */
+class MyApp(title: String) : AbstractApp(title) {
 
   private val cube = Mesh(
     triangles = arrayOf(
@@ -41,40 +51,54 @@ class MainExample : App() {
       Triangle(p0 = d, p1 = c, p2 = g, color = Color.YELLOW),
       Triangle(p0 = g, p1 = c, p2 = h, color = Color.YELLOW)
     ),
-    scale = 100.0
+    scale = 50.0
   )
 
-  override fun init(engine: Engine) {
+  //Vector3(-1,0, 1)
+
+  private val plane = Mesh(
+    triangles = arrayOf(
+      Triangle(
+        Vector3(1,0, -1),
+        Vector3(1,0, 1),
+        Vector3(-1,0, 1),
+        Color.GRAY),
+      Triangle(
+        Vector3(-1,0, 1),
+        Vector3(-1,0, -1),
+        Vector3(1, 0, -1),
+        Color.GRAY)
+    ),
+    scale = 200.0
+  )
+
+  override fun init() {
 
   }
 
-  override fun update(engine: Engine, deltaTime: Float) {
-    cube.update(deltaTime) {
-      if (Input.isKey(KeyEvent.VK_RIGHT)) {
-        cube.position.x += 10 * it
-      } else if (Input.isKey(KeyEvent.VK_LEFT)) {
-        cube.position.x -= 10 * it
-      }
+  override fun update(step: Float) {
+    cube.update()
+    cube.rotation.y += 1 * step
 
-      if (Input.isKey(KeyEvent.VK_UP)) {
-        cube.position.z += 10 * it
-      } else if (Input.isKey(KeyEvent.VK_DOWN)) {
-        cube.position.z -= 10 * it
-      }
+    plane.update()
 
-      cube.rotation.x += 1 * it
-      cube.rotation.y += 2 * it
-      cube.rotation.z += 3 * it
+    if (Input.isKey(KeyEvent.VK_PLUS)) {
+      plane.position.y -= 2 * step
+      println(plane.position)
+    } else if (Input.isKey(KeyEvent.VK_MINUS)) {
+      plane.position.y += 2 * step
+      println(plane.position)
     }
   }
 
-  override fun render(engine: Engine, renderer: Renderer) {
+  override fun render(renderer: Renderer) {
     cube.render(renderer)
+    plane.render(renderer)
   }
 }
 
 fun main() {
-  val e = Engine(MainExample())
+  val e = Engine(MyApp("Meu jogo  3D"))
   e.setSize(ResolutionX.toInt(), ResolutionY.toInt())
   e.start()
 }

@@ -5,57 +5,68 @@ import lucasalfare.basicappengine.graphics.ResolutionX
 import lucasalfare.basicappengine.graphics.ResolutionY
 import lucasalfare.basicappengine.math.Vector3
 import java.awt.Color
-import java.awt.geom.Path2D
 
 /**
  * The points here must be declared in CLOCKWISE
  * order consistently.
  */
-data class Triangle(
-    var p0: Vector3 = Vector3(),
-    var p1: Vector3 = Vector3(),
-    var p2: Vector3 = Vector3(),
-    var color: Color = Color.WHITE
+class Triangle(
+  var p0: Vector3,
+  var p1: Vector3,
+  var p2: Vector3,
+  var color: Color
 ) {
 
   var normal = 0.0
 
-  private val vertices = Array(3) { Vector3() }
+  private val transformedPoints = Array(3) { Vector3() }
+
+  private lateinit var a: Vector3
+  private lateinit var b: Vector3
+  private lateinit var c: Vector3
 
   fun update(
-      source: Triangle,
-      position: Vector3 = Vector3(),
-      rotation: Vector3 = Vector3(),
-      scaleFactor: Double = 1.0
+    position: Vector3,
+    rotation: Vector3,
+    scale: Double
   ) {
-    color = source.color
+    //transforms and apply perspective to this triangle points
+    a = p0
+      // transforms...
+      .translateTo(position).rotate(rotation).scale(scale)
+      // ...and applies perspective
+      .toPerspective().centerInBound(ResolutionX, ResolutionY)
 
-    //transforms the triangle points
-    p0 = source.p0.rotate(rotation).translateTo(position).scale(scaleFactor)
-    p1 = source.p1.rotate(rotation).translateTo(position).scale(scaleFactor)
-    p2 = source.p2.rotate(rotation).translateTo(position).scale(scaleFactor)
+    b = p1
+      // transforms...
+      .translateTo(position).rotate(rotation).scale(scale)
+      // ...and applies perspective
+      .toPerspective().centerInBound(ResolutionX, ResolutionY)
 
-    //apply perspective
-    p0 = p0.toPerspective().centerInBound(ResolutionX, ResolutionY)
-    p1 = p1.toPerspective().centerInBound(ResolutionX, ResolutionY)
-    p2 = p2.toPerspective().centerInBound(ResolutionX, ResolutionY)
+    c = p2
+      // transforms...
+      .translateTo(position).rotate(rotation).scale(scale)
+      // ...and applies perspective
+      .toPerspective().centerInBound(ResolutionX, ResolutionY)
 
     //then calculates the normal
-    normal = (p1.x - p0.x) * (p2.y - p0.y) - (p1.y - p0.y) * (p2.x - p0.x)
+    normal = (b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x)
 
-    vertices[0] = p0
-    vertices[1] = p1
-    vertices[2] = p2
-    vertices.sortBy { it.y }
+    // always sorts the points by Y value, helper to rasterize
+    transformedPoints[0] = a
+    transformedPoints[1] = b
+    transformedPoints[2] = c
+    transformedPoints.sortBy { it.y }
   }
 
   fun render(renderer: Renderer) {
-    renderer.g.color = color
     rasterize(renderer)
   }
 
   private fun rasterize(renderer: Renderer) {
-    val p = Path2D.Double()
+    a = transformedPoints[0]
+    b = transformedPoints[1]
+    c = transformedPoints[2]
 
     fun rasterizeFlatBottom(v1: Vector3, v2: Vector3, v3: Vector3) {
       val inverseSlope1 = (v2.x - v1.x) / (v2.y - v1.y)
@@ -64,12 +75,9 @@ data class Triangle(
       var currX2 = v1.x
       var scanLineY = v1.y
       while (scanLineY <= v2.y) {
-        p.moveTo(currX1, scanLineY)
-        p.lineTo(currX2, scanLineY)
-
+        renderer.drawLine(currX1.toInt(), scanLineY.toInt(), currX2.toInt(), scanLineY.toInt(), color.rgb)
         currX1 += inverseSlope1
         currX2 += inverseSlope2
-
         scanLineY++
       }
     }
@@ -82,30 +90,27 @@ data class Triangle(
 
       var scanLineY = v3.y
       while (scanLineY > v1.y) {
-        p.moveTo(currX1, scanLineY)
-        p.lineTo(currX2, scanLineY)
-
+        renderer.drawLine(currX1.toInt(), scanLineY.toInt(), currX2.toInt(), scanLineY.toInt(), color.rgb)
         currX1 -= inverseSlope1
         currX2 -= inverseSlope2
-
         scanLineY--
       }
     }
 
-    if (vertices[1].y == vertices[2].y) {
-      rasterizeFlatBottom(vertices[0], vertices[1], vertices[2])
-    } else if (vertices[0].y == vertices[1].y) {
-      rasterizeFlatTop(vertices[0], vertices[1], vertices[2])
+    if (b.y == c.y) {
+      rasterizeFlatBottom(a, b, c)
+    } else if (a.y == b.y) {
+      rasterizeFlatTop(a, b, c)
     } else {
       val vertex4 = Vector3(
-        x = (vertices[0].x + ((vertices[1].y - vertices[0].y) / (vertices[2].y - vertices[0].y)) * (vertices[2].x - vertices[0].x)),
-        y = vertices[1].y
+        x = (a.x + ((b.y - a.y) / (c.y - a.y)) * (c.x - a.x)),
+        y = b.y
       )
 
-      rasterizeFlatTop(vertices[1], vertex4, vertices[2])
-      rasterizeFlatBottom(vertices[0], vertices[1], vertex4)
+      rasterizeFlatTop(b, vertex4, c)
+      rasterizeFlatBottom(a, b, vertex4)
     }
-
-    renderer.g.draw(p)
   }
+
+  override fun toString() = "Original points=($p0 | $p1 | $p2); CurrentTransformedPoints=($a | $b | $c)"
 }

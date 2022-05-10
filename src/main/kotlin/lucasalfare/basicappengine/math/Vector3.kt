@@ -4,6 +4,7 @@ import kotlin.math.cos
 import kotlin.math.sin
 import kotlin.math.sqrt
 
+@Suppress("MemberVisibilityCanBePrivate")
 class Vector3(
   var x: Double = 0.0,
   var y: Double = 0.0,
@@ -112,6 +113,14 @@ class Vector3(
     val deltaZ = v.z - z
     return sqrt((deltaX * deltaX) + (deltaY * deltaY) + (deltaZ * deltaZ))
   }
+
+  fun copy(v: Vector3) {
+    this.x = v.x
+    this.y = v.y
+    this.z = v.z
+  }
+
+  fun clone() = Vector3(this.x, this.y, this.z)
 
   override fun toString() = "[$x, $y, $z]"
 }
