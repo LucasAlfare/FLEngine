@@ -44,17 +44,14 @@ class Triangle(
     val scale = args[2] as Double
 
     // first transforms (store results in separate fields)
-    a = p0
-      .translate(position).rotate(rotation).scale(scale)
-      .toPerspective().centerInBound(ResolutionX, ResolutionY)
+    a = p0.translate(position).rotate(rotation).scale(scale)
+    b = p1.translate(position).rotate(rotation).scale(scale)
+    c = p2.translate(position).rotate(rotation).scale(scale)
 
-    b = p1
-      .translate(position).rotate(rotation).scale(scale)
-      .toPerspective().centerInBound(ResolutionX, ResolutionY)
-
-    c = p2
-      .translate(position).rotate(rotation).scale(scale)
-      .toPerspective().centerInBound(ResolutionX, ResolutionY)
+    // now apply perspective
+    a = a.toPerspective().centerInBound(ResolutionX, ResolutionY)
+    b = b.toPerspective().centerInBound(ResolutionX, ResolutionY)
+    c = c.toPerspective().centerInBound(ResolutionX, ResolutionY)
 
     // then calculates the normal
     normal = (b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x)

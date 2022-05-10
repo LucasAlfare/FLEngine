@@ -25,7 +25,6 @@ class Mesh(
     triangles.forEach { it.update(position, rotation, scale) }
   }
 
-
   override fun render(renderer: Renderer) {
     triangles.forEach {
       if (it.normal < 0) {
