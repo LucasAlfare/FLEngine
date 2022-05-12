@@ -1,4 +1,4 @@
 package lucasalfare.basicappengine.graphics
 
-var ScreenWidth = 800.0
-var ScreenHeight = 600.0
+var ScreenWidth = 800f
+var ScreenHeight = 600f

@@ -19,9 +19,8 @@ class Triangle(
   var color: Color
 ) : Handleable {
 
-  var normal = 0.0
-
-  var averageZ = 0.0
+  var normal = 0f
+  var averageZ = 0f
 
   private val transformedPoints =
     Array(3) { Vector3() }
@@ -45,7 +44,7 @@ class Triangle(
   override fun update(vararg args: Any) {
     val position = args[0] as Vector3
     val rotation = args[1] as Vector3
-    val scale = args[2] as Double
+    val scale = args[2] as Float
 
     // first transforms (store results in separate fields)
     a = p0.translate(position).rotate(rotation).scale(scale)
@@ -158,7 +157,7 @@ class Triangle(
 
     for (y in minY..maxY) {
       for (x in minX..maxX) {
-        if (containsPoint(x.toDouble(), y.toDouble())) {
+        if (containsPoint(x.toFloat(), y.toFloat())) {
           renderer.setPixel(x, y, color.rgb)
         }
       }
@@ -166,10 +165,10 @@ class Triangle(
   }
 
   fun containsPoint(
-    x: Double, y: Double,
-    ax: Double = a.x, ay: Double = a.y,
-    bx: Double = b.x, by: Double = b.y,
-    cx: Double = c.x, cy: Double = c.y
+    x: Float, y: Float,
+    ax: Float = a.x, ay: Float = a.y,
+    bx: Float = b.x, by: Float = b.y,
+    cx: Float = c.x, cy: Float = c.y
   ): Boolean {
     val det = (bx - ax) * (cy - ay) - (by - ay) * (cx - ax)
 

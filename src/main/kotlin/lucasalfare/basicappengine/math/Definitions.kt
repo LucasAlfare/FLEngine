@@ -10,4 +10,4 @@ var FieldOfView = 45.0
 
 fun getAspectRatio() = ScreenHeight / ScreenWidth
 
-fun getZ0() = (ScreenWidth / 2.0) / tan((FieldOfView / 2.0) * PI / 180)
+fun getZ0() = ((ScreenWidth / 2f) / tan((FieldOfView / 2f) * PI / 180f)).toFloat()

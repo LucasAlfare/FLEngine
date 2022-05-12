@@ -6,12 +6,12 @@ import kotlin.math.sqrt
 
 @Suppress("MemberVisibilityCanBePrivate")
 class Vector3(
-  var x: Double = 0.0,
-  var y: Double = 0.0,
-  var z: Double = 0.0
+  var x: Float = 0f,
+  var y: Float = 0f,
+  var z: Float = 0f
 ) {
 
-  constructor(x: Int, y: Int, z: Int) : this(x.toDouble(), y.toDouble(), z.toDouble())
+  constructor(x: Int, y: Int, z: Int) : this(x.toFloat(), y.toFloat(), z.toFloat())
 
   fun length() =
     sqrt((x * x) + (y * y) + (z * z))
@@ -59,8 +59,8 @@ class Vector3(
    */
   fun normalized(): Vector3 {
     val len2 = length()
-    if (len2 == 0.0 || len2 == 1.0) return this
-    return scale(1.0 / sqrt(len2))
+    if (len2 == 0f || len2 == 1f) return this
+    return scale(1f / sqrt(len2))
   }
 
   fun translate(translation: Vector3) = Vector3(
@@ -69,7 +69,7 @@ class Vector3(
     z = z + translation.z
   )
 
-  fun scale(scalar: Double) = Vector3(
+  fun scale(scalar: Float) = Vector3(
     x = x * scalar,
     y = y * scalar,
     z = z * scalar
@@ -99,7 +99,7 @@ class Vector3(
     z = z
   )
 
-  fun centralize(width: Double, height: Double) = Vector3(
+  fun centralize(width: Float, height: Float) = Vector3(
     x = x + (width / 2),
     y = y + (height / 2)
   )
@@ -107,7 +107,7 @@ class Vector3(
   /**
    * Returns the distance between this vector and the vector of the param [v].
    */
-  fun distance(v: Vector3): Double {
+  fun distance(v: Vector3): Float {
     val deltaX = v.x - x
     val deltaY = v.y - y
     val deltaZ = v.z - z
