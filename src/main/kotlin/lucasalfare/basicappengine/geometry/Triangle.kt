@@ -6,6 +6,8 @@ import lucasalfare.basicappengine.graphics.ResolutionX
 import lucasalfare.basicappengine.graphics.ResolutionY
 import lucasalfare.basicappengine.math.Vector3
 import java.awt.Color
+import kotlin.math.max
+import kotlin.math.min
 
 /**
  * The points here must be declared in a consistent order.
@@ -15,9 +17,11 @@ class Triangle(
   var p1: Vector3,
   var p2: Vector3,
   var color: Color
-): Handleable {
+) : Handleable {
 
-  var crossProductLength = 0.0
+  var normal = 0.0
+
+  var averageZ = 0.0
 
   private val transformedPoints =
     Array(3) { Vector3() }
@@ -48,26 +52,30 @@ class Triangle(
     b = p1.translate(position).rotate(rotation).scale(scale)
     c = p2.translate(position).rotate(rotation).scale(scale)
 
+    // calculates arithmetically the average Z value of this triangle
+    // before applying perspective
+    averageZ = (a.z + b.z + c.z) / 3
+
     // now apply perspective
     a = a.toPerspective().centerInBound(ResolutionX, ResolutionY)
     b = b.toPerspective().centerInBound(ResolutionX, ResolutionY)
     c = c.toPerspective().centerInBound(ResolutionX, ResolutionY)
 
     // then calculates the length of the cross product between to vectors
-    crossProductLength = (b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x)
+    normal = (b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x)
 
     /*
     also, always sorts the points by Y value, helper to rasterize;
     here is used an array to sort instead doing it manually.
     */
-    transformedPoints[0] = a
-    transformedPoints[1] = b
-    transformedPoints[2] = c
-    transformedPoints.sortBy { it.y }
+//    transformedPoints[0] = a
+//    transformedPoints[1] = b
+//    transformedPoints[2] = c
+//    transformedPoints.sortBy { it.y }
   }
 
   override fun render(renderer: Renderer) {
-    rasterize(renderer)
+    rasterize2(renderer)
   }
 
   /**
@@ -136,12 +144,44 @@ class Triangle(
     }
   }
 
+  /**
+   * Rasterizes this triangle using a barycentric point to determine if a pixel should
+   * be drawn or not.
+   */
+  private fun rasterize2(renderer: Renderer) {
+    fun contains(
+      x: Int, y: Int,
+      ax: Double = a.x, ay: Double = a.y,
+      bx: Double = b.y, by: Double = b.y,
+      cx: Double = c.y, cy: Double = c.y
+    ): Boolean {
+      val det = (bx - ax) * (cy - ay) - (by - ay) * (cx - ax)
+
+      return (det * ((bx - ax) * (y - ay) - (by - ay) * (x - ax)) >= 0) &&
+              (det * ((cx - bx) * (y - by) - (cy - by) * (x - bx)) >= 0) &&
+              (det * ((ax - cx) * (y - cy) - (ay - cy) * (x - cx)) >= 0)
+    }
+
+    val maxX = max(a.x, max(b.x, c.x)).toInt()
+    val minX = min(a.x, min(b.x, c.x)).toInt()
+    val maxY = max(a.y, max(b.y, c.y)).toInt()
+    val minY = min(a.y, min(b.y, c.y)).toInt()
+
+    for (y in minY..maxY) {
+      for (x in minX..maxX) {
+        if (contains(x, y)) {
+          renderer.setPixel(x, y, color.rgb)
+        }
+      }
+    }
+  }
+
   override fun toString() =
     "Triangle(" +
             "p0=$p0, " +
             "p1=$p1, " +
             "p2=$p2, " +
             "color=$color, " +
-            "normal=$crossProductLength, " +
+            "normal=$normal, " +
             "transformedPoints=${transformedPoints.contentToString()})"
 }

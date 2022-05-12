@@ -76,7 +76,9 @@ class MyApp(title: String) : AbstractApp(title) {
     val timeStep = args[0] as Float
 
     cube.update()
+    cube.rotation.x += 1 * timeStep
     cube.rotation.y += 1 * timeStep
+    cube.rotation.z += 1 * timeStep
   }
 
   override fun render(renderer: Renderer) {
