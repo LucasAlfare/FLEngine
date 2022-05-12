@@ -11,6 +11,11 @@ class Window(
   scale: Float
 ) {
 
+  /**
+   * Main application title.
+   *
+   * This is public, then could be set from outside if needed.
+   */
   var title = ""
 
   /**
@@ -23,7 +28,7 @@ class Window(
    * This canvas works as a container to hold the [renderingImage].
    *
    * This also provides the initialization of an [BufferStrategy]
-   * object and, for this engine, is the root source of the
+   * object which is, for this engine, is the root source of the
    * input events (mouse and keyboard).
    */
   val canvas: Canvas
@@ -43,6 +48,7 @@ class Window(
   private val strategy: BufferStrategy
 
   init {
+    //setup root image
     renderingImage = createCompatibleImageBasedOn(
       BufferedImage(
         width,
@@ -54,37 +60,43 @@ class Window(
         BufferedImage.TYPE_INT_RGB
       )
     )
-    canvas = Canvas()
+
+    //setup canvas
     val canvasWidth = (width * scale).toInt()
     val canvasHeight = (height * scale).toInt()
     val windowDimension = Dimension(canvasWidth, canvasHeight)
-
+    canvas = Canvas()
     canvas.size = windowDimension
     canvas.preferredSize = windowDimension
     canvas.maximumSize = windowDimension
     canvas.minimumSize = windowDimension
 
+    //setup frame
     frame = JFrame(title)
     frame.defaultCloseOperation = JFrame.EXIT_ON_CLOSE
     frame.layout = BorderLayout()
     frame.add(canvas, BorderLayout.CENTER)
     frame.isResizable = false
-    frame.pack() // this makes the frame "match" the canvas dimension
+    frame.pack() // this makes the frame "match" to the canvas dimension
     frame.setLocationRelativeTo(null)
     frame.isVisible = true //must be visible to be able to create a [Strategy]
 
+    //setup buffer strategy
     canvas.createBufferStrategy(2)
     strategy = canvas.bufferStrategy
   }
 
+  /**
+   * Updates title with current received rates that comes from the
+   * [Engine].
+   */
   fun update(fps: Int, ups: Int) {
     frame.title = "$title | $fps FPS, $ups UPS"
   }
 
   fun render() {
     strategy.drawGraphics.drawImage(
-      renderingImage,
-      0, 0,
+      renderingImage, 0, 0,
       canvas.width, canvas.height,
       null
     )

@@ -10,36 +10,36 @@ import kotlin.math.abs
 class Renderer(var targetImage: BufferedImage) {
 
   /**
-   * Color used to reset pixels values when clearing.
+   * Color used to reset pixels values while "clearing".
    */
   var clearColor: Int = Color.BLACK.rgb
 
   /**
-   * This color is not considered when trying to set pixels individually.
+   * This color is not considered when trying to set individual pixels.
    */
   var transparentColor: Int = Color.MAGENTA.rgb
 
   /**
-   * Field to store a REFERENCE to the actual real pixel info, from the target image.
+   * Field to store a REFERENCE to the actual/real pixel info, from the target image.
    *
    * Modifying this array automatically affects the target image.
    */
   private var pixelData: IntArray = (targetImage.raster.dataBuffer as DataBufferInt).data
 
   fun clear() {
-    Arrays.fill(pixelData, clearColor)
+    pixelData.fill(clearColor)
   }
 
   /**
-   * Sets a single pixel in the buffer image to the given color.
+   * Sets a single pixel in the buffer image with the given [color].
    *
    * The pixel is set only if:
    * - the pixel coordinate is inside the image bounds;
-   * - the color passed is not equals to the [transparentColor] value.
+   * - the color passed is not equals to the [transparentColor] value defined ins this class.
    */
-  fun setPixel(x: Int, y: Int, value: Int) {
-    if (!coordInBounds(x, y) || value == transparentColor) return
-    pixelData[x + y * targetImage.width] = value
+  fun setPixel(x: Int, y: Int, color: Int) {
+    if (!coordInBounds(x, y) || color == transparentColor) return
+    pixelData[x + y * targetImage.width] = color
   }
 
   fun getPixel(x: Int, y: Int) =
@@ -48,7 +48,7 @@ class Renderer(var targetImage: BufferedImage) {
 
   /**
    * Basic function to draw line between two points.
-   * This function uses the Bresemham's algorithm.
+   * This function uses the Bresenham's algorithm.
    */
   fun drawLine(x1: Int, y1: Int, x2: Int, y2: Int, color: Int) {
     var d = 0
@@ -89,6 +89,15 @@ class Renderer(var targetImage: BufferedImage) {
       }
     }
   }
+
+  /**
+   * Creates an instance to directly access a [Graphics2D] object from the image passed.
+   *
+   * This renderer class aims to be free from the pre-created graphics, from [java.awt]
+   * package. For this reason, any instance of that is keep here, however, if needed, the
+   * graphics from [java.awt] can be retrieved from this function.
+   */
+  fun createGraphics() = targetImage.createGraphics()
 
   private fun coordInBounds(x: Int, y: Int) =
     (x >= 0) && (x < targetImage.width) &&

@@ -28,10 +28,10 @@ class Mesh(
     triangles.forEach { it.update(position, rotation, scale) }
   }
 
-  override fun render(renderer: Renderer) {
+  override fun render(r: Renderer) {
     triangles.forEach {
       if (it.normal < 0) {
-        it.render(renderer)
+        it.render(r)
       }
     }
   }

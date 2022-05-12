@@ -93,13 +93,13 @@ class Vector3(
             z * (cos(rotationPoint.y) * cos(rotationPoint.x))
   )
 
-  fun toPerspective() = Vector3(
+  fun perspective() = Vector3(
     x = x * getZ0() / (getZ0() + z),
     y = y * getZ0() / (getZ0() + z),
     z = z
   )
 
-  fun centerInBound(width: Double, height: Double) = Vector3(
+  fun centralize(width: Double, height: Double) = Vector3(
     x = x + (width / 2),
     y = y + (height / 2)
   )
@@ -114,12 +114,18 @@ class Vector3(
     return sqrt((deltaX * deltaX) + (deltaY * deltaY) + (deltaZ * deltaZ))
   }
 
+  /**
+   * Sets the values of this vector to be the same of the passed vector [v].
+   */
   fun copy(v: Vector3) {
     this.x = v.x
     this.y = v.y
     this.z = v.z
   }
 
+  /**
+   * Returns a new instance (new object) with the same values from this.
+   */
   fun clone() = Vector3(this.x, this.y, this.z)
 
   override fun toString() = "[$x, $y, $z]"

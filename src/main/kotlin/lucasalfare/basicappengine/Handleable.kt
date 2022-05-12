@@ -5,6 +5,8 @@ import lucasalfare.basicappengine.graphics.Renderer
 /**
  * Interface to describe an entity which usually can be
  * updated and rendered.
+ *
+ * This makes a standard pattern to all implementing entities.
  */
 interface Handleable {
 
@@ -16,7 +18,7 @@ interface Handleable {
   fun update(vararg args: Any = emptyArray())
 
   /**
-   * Renders/Draws anything related to this object using the [renderer] object.
+   * Renders/Draws anything related to this object using the [r] object.
    */
-  fun render(renderer: Renderer)
+  fun render(r: Renderer)
 }

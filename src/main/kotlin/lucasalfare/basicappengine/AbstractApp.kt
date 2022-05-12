@@ -38,5 +38,5 @@ abstract class AbstractApp(var title: String) : Handleable {
    * This method is called in a certain frequency, which is
    * determined by the [Engine] class.
    */
-  abstract override fun render(renderer: Renderer)
+  abstract override fun render(r: Renderer)
 }

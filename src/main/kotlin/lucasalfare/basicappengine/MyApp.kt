@@ -24,8 +24,8 @@ private val g = Vector3(-1.0, -1.0, 1.0)
 private val h = Vector3(1.0, -1.0, 1.0)
 
 /**
- * A custom class that represents an Application that can be
- * updated and rendered by the Engine.
+ * A custom class representing an Application that can be
+ * updated and rendered by the [Engine].
  */
 class MyApp(title: String) : AbstractApp(title) {
 
@@ -58,12 +58,12 @@ class MyApp(title: String) : AbstractApp(title) {
         Vector3(1,0, -1),
         Vector3(1,0, 1),
         Vector3(-1,0, 1),
-        Color.GRAY),
+        Color.CYAN),
       Triangle(
         Vector3(-1,0, 1),
         Vector3(-1,0, -1),
         Vector3(1, 0, -1),
-        Color.GRAY)
+        Color.CYAN)
     ),
     scale = 200.0
   )
@@ -79,16 +79,20 @@ class MyApp(title: String) : AbstractApp(title) {
     cube.rotation.x += 1 * timeStep
     cube.rotation.y += 1 * timeStep
     cube.rotation.z += 1 * timeStep
+
+    plane.update()
+    plane.position.y = 60.0 * timeStep
+    plane.rotation.y -= 1 * timeStep
   }
 
-  override fun render(renderer: Renderer) {
-    cube.render(renderer)
-    plane.render(renderer)
+  override fun render(r: Renderer) {
+    cube.render(r)
+    plane.render(r)
   }
 }
 
 fun main() {
-  val e = Engine(MyApp("Meu jogo  3D"))
-  e.setSize(ResolutionX.toInt(), ResolutionY.toInt())
+  val e = Engine(MyApp("Meu teste de jogo  3D"))
+  e.setSize(ScreenWidth.toInt(), ScreenHeight.toInt())
   e.start()
 }
