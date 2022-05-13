@@ -4,7 +4,7 @@ import lucasalfare.basicappengine.AbstractApp
 import lucasalfare.basicappengine.input.Input
 
 @Suppress("SameParameterValue")
-class Engine(private val app: AbstractApp) : Runnable {
+class Engine(private val targetApp: AbstractApp) : Runnable {
 
   var width = 0
   var height = 0
@@ -50,8 +50,8 @@ class Engine(private val app: AbstractApp) : Runnable {
       }
     }
 
-    window.title = app.title
-    app.init()
+    window.title = targetApp.title
+    targetApp.init()
     ratesMeasurementHelper.start()
     mainThread.start()
   }
@@ -87,7 +87,7 @@ class Engine(private val app: AbstractApp) : Runnable {
    */
   private fun update(step: Float) {
     input.update()
-    app.update(step)
+    targetApp.update(step)
     updates++
   }
 
@@ -96,7 +96,7 @@ class Engine(private val app: AbstractApp) : Runnable {
    */
   private fun render() {
     renderer.clear()
-    app.render(renderer)
+    targetApp.render(renderer)
     window.render()
     frames++
   }

@@ -4,10 +4,18 @@ import lucasalfare.basicappengine.Handleable
 import lucasalfare.basicappengine.graphics.Renderer
 import lucasalfare.basicappengine.graphics.ScreenWidth
 import lucasalfare.basicappengine.graphics.ScreenHeight
+import lucasalfare.basicappengine.math.UV
 import lucasalfare.basicappengine.math.Vector3
+import lucasalfare.basicappengine.math.percentile
 import java.awt.Color
 import kotlin.math.max
 import kotlin.math.min
+
+enum class RenderMode {
+  Outline,
+  Fill,
+  FillAndOutline
+}
 
 /**
  * The points here must be declared in a consistent order.
@@ -16,18 +24,24 @@ class Triangle(
   var p0: Vector3,
   var p1: Vector3,
   var p2: Vector3,
-  var color: Color
+  var color: Color,
+  var outlineColor: Color = Color.BLACK
 ) : Handleable {
 
   var normal = 0f
   var averageZ = 0f
-
-  private val transformedPoints =
-    Array(3) { Vector3() }
+  var renderMode = RenderMode.FillAndOutline
 
   private lateinit var a: Vector3
   private lateinit var b: Vector3
   private lateinit var c: Vector3
+
+  private lateinit var uva: UV
+  private lateinit var uvb: UV
+  private lateinit var uvc: UV
+
+  private val transformedPoints =
+    Array(3) { Vector3() }
 
   /**
    * Operations done in this update:
@@ -63,6 +77,8 @@ class Triangle(
     // then calculates the length of the cross product between to vectors
     normal = (b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x)
 
+    defineUVs()
+
     /*
     also, always sorts the points by Y value, helper to rasterize;
     here is used an array to sort instead doing it manually.
@@ -76,7 +92,26 @@ class Triangle(
   }
 
   override fun render(r: Renderer) {
-    rasterize2(r)
+    when (renderMode) {
+      RenderMode.Fill -> {
+        rasterize2(r)
+      }
+
+      RenderMode.Outline -> {
+        outline(r)
+      }
+
+      RenderMode.FillAndOutline -> {
+        rasterize2(r)
+        outline(r)
+      }
+    }
+  }
+
+  private fun outline(r: Renderer) {
+    r.drawLine(a.x.toInt(), a.y.toInt(), b.x.toInt(), b.y.toInt(), outlineColor.rgb)
+    r.drawLine(b.x.toInt(), b.y.toInt(), c.x.toInt(), c.y.toInt(), outlineColor.rgb)
+    r.drawLine(c.x.toInt(), c.y.toInt(), a.x.toInt(), a.y.toInt(), outlineColor.rgb)
   }
 
   /**
@@ -146,8 +181,8 @@ class Triangle(
   }
 
   /**
-   * Rasterizes this triangle using a barycentric point to determine if a pixel should
-   * be drawn or not.
+   * Rasterizes this triangle using a barycentric point to determine if a single
+   * pixel should be drawn or not.
    */
   private fun rasterize2(renderer: Renderer) {
     val minX = min(a.x, min(b.x, c.x)).toInt()
@@ -162,6 +197,21 @@ class Triangle(
         }
       }
     }
+  }
+
+  private fun defineUVs() {
+    val minX = min(a.x, min(b.x, c.x))
+    val maxX = max(a.x, max(b.x, c.x))
+    val minY = min(a.y, min(b.y, c.y))
+    val maxY = max(a.y, max(b.y, c.y))
+
+    uva.u = percentile(minX, maxX, a.x)
+    uvb.u = percentile(minX, maxX, b.x)
+    uvc.u = percentile(minX, maxX, c.x)
+
+    uva.v = percentile(minY, maxY, a.y)
+    uvb.v = percentile(minY, maxY, b.y)
+    uvc.v = percentile(minY, maxY, c.y)
   }
 
   fun containsPoint(

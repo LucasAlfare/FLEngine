@@ -15,11 +15,6 @@ class Renderer(var targetImage: BufferedImage) {
   var clearColor: Int = Color.BLACK.rgb
 
   /**
-   * This color is not considered when trying to set individual pixels.
-   */
-  var transparentColor: Int = Color.MAGENTA.rgb
-
-  /**
    * Field to store a REFERENCE to the actual/real pixel info, from the target image.
    *
    * Modifying this array automatically affects the target image.
@@ -102,4 +97,11 @@ class Renderer(var targetImage: BufferedImage) {
   private fun coordInBounds(x: Int, y: Int) =
     (x >= 0) && (x < targetImage.width) &&
     (y >= 0) && (y < targetImage.height)
+
+  companion object {
+    /**
+     * This color is not considered when trying to set individual pixels.
+     */
+    var transparentColor: Int = Color.MAGENTA.rgb
+  }
 }

@@ -13,7 +13,7 @@ class Mesh(
   var triangles: Array<Triangle>,
   var position: Vector3 = Vector3(),
   var rotation: Vector3 = Vector3(),
-  var scale: Double = 1.0
+  var scale: Float = 1f
 ) : Handleable {
 
   override fun update(vararg args: Any) {

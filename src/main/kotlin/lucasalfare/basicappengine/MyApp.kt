@@ -13,15 +13,15 @@ import java.awt.Color
 /**
  * Only auxiliary fields to store points to the cube mesh.
  */
-private val a = Vector3(-1.0, 1.0, -1.0)
-private val b = Vector3(1.0, 1.0, -1.0)
-private val c = Vector3(1.0, -1.0, -1.0)
-private val d = Vector3(-1.0, -1.0, -1.0)
+private val a = Vector3(-1f, 1f, -1f)
+private val b = Vector3(1f, 1f, -1f)
+private val c = Vector3(1f, -1f, -1f)
+private val d = Vector3(-1f, -1f, -1f)
 
-private val e = Vector3(1.0, 1.0, 1.0)
-private val f = Vector3(-1.0, 1.0, 1.0)
-private val g = Vector3(-1.0, -1.0, 1.0)
-private val h = Vector3(1.0, -1.0, 1.0)
+private val e = Vector3(1f, 1f, 1f)
+private val f = Vector3(-1f, 1f, 1f)
+private val g = Vector3(-1f, -1f, 1f)
+private val h = Vector3(1f, -1f, 1f)
 
 /**
  * A custom class representing an Application that can be
@@ -49,23 +49,25 @@ class MyApp(title: String) : AbstractApp(title) {
       Triangle(p0 = d, p1 = c, p2 = g, color = Color.YELLOW),
       Triangle(p0 = g, p1 = c, p2 = h, color = Color.YELLOW)
     ),
-    scale = 100.0
+    scale = 100f
   )
 
   private val plane = Mesh(
     triangles = arrayOf(
       Triangle(
-        Vector3(1,0, -1),
-        Vector3(1,0, 1),
-        Vector3(-1,0, 1),
-        Color.CYAN),
-      Triangle(
-        Vector3(-1,0, 1),
-        Vector3(-1,0, -1),
         Vector3(1, 0, -1),
-        Color.CYAN)
+        Vector3(1, 0, 1),
+        Vector3(-1, 0, 1),
+        Color.CYAN
+      ),
+      Triangle(
+        Vector3(-1, 0, 1),
+        Vector3(-1, 0, -1),
+        Vector3(1, 0, -1),
+        Color.CYAN
+      )
     ),
-    scale = 200.0
+    scale = 200f
   )
 
   override fun init() {
@@ -81,7 +83,7 @@ class MyApp(title: String) : AbstractApp(title) {
     cube.rotation.z += 1 * timeStep
 
     plane.update()
-    plane.position.y = 60.0 * timeStep
+    plane.position.y = 60f * timeStep
     plane.rotation.y -= 1 * timeStep
   }
 
@@ -92,7 +94,7 @@ class MyApp(title: String) : AbstractApp(title) {
 }
 
 fun main() {
-  val e = Engine(MyApp("Meu teste de jogo  3D"))
+  val e = Engine(MyApp("Meu teste de render  3D"))
   e.setSize(ScreenWidth.toInt(), ScreenHeight.toInt())
   e.start()
 }
