@@ -2,6 +2,7 @@ package lucasalfare.basicappengine.geometry
 
 import lucasalfare.basicappengine.Handleable
 import lucasalfare.basicappengine.graphics.Renderer
+import lucasalfare.basicappengine.graphics.Texture
 import lucasalfare.basicappengine.math.Vector3
 
 /**
@@ -13,8 +14,16 @@ class Mesh(
   var triangles: Array<Triangle>,
   var position: Vector3 = Vector3(),
   var rotation: Vector3 = Vector3(),
-  var scale: Float = 1f
+  var scale: Float = 1f,
+  var texture: Texture? = null
 ) : Handleable {
+
+  init {
+    triangles.forEach {
+      it.targetTexture = texture
+      it.defineRenderMode()
+    }
+  }
 
   override fun update(vararg args: Any) {
     triangles.sortBy { it.averageZ }

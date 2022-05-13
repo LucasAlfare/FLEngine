@@ -1,7 +1,13 @@
 package lucasalfare.basicappengine.graphics
 
+import java.awt.Color
 import java.awt.GraphicsEnvironment
 import java.awt.image.BufferedImage
+
+/**
+ * This color is not considered when trying to set individual pixels.
+ */
+var transparentColor: Int = Color.MAGENTA.rgb
 
 //source: https://stackoverflow.com/a/197060/4563960
 fun createCompatibleImageBasedOn(image: BufferedImage): BufferedImage {

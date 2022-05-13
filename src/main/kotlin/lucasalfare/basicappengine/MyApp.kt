@@ -49,7 +49,8 @@ class MyApp(title: String) : AbstractApp(title) {
       Triangle(p0 = d, p1 = c, p2 = g, color = Color.YELLOW),
       Triangle(p0 = g, p1 = c, p2 = h, color = Color.YELLOW)
     ),
-    scale = 100f
+    scale = 100f,
+    texture = Texture("crate_texture.png")
   )
 
   private val plane = Mesh(
@@ -82,14 +83,14 @@ class MyApp(title: String) : AbstractApp(title) {
     cube.rotation.y += 1 * timeStep
     cube.rotation.z += 1 * timeStep
 
-    plane.update()
-    plane.position.y = 60f * timeStep
-    plane.rotation.y -= 1 * timeStep
+//    plane.update()
+//    plane.position.y = 60f * timeStep
+//    plane.rotation.y -= 1 * timeStep
   }
 
   override fun render(r: Renderer) {
     cube.render(r)
-    plane.render(r)
+    //plane.render(r)
   }
 }
 
