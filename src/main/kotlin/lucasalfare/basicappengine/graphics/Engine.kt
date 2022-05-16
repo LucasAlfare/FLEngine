@@ -17,7 +17,6 @@ class Engine(private val targetApp: AbstractApp) : Runnable {
   private lateinit var renderer: Renderer
   private lateinit var input: Input
 
-  private lateinit var ratesMeasurementHelper: Thread
   private lateinit var mainThread: Thread
 
   /**
@@ -36,8 +35,13 @@ class Engine(private val targetApp: AbstractApp) : Runnable {
 
     mainThread = Thread(this)
 
-    ratesMeasurementHelper = Thread {
-      while(true) {
+    window.title = targetApp.title
+    targetApp.init()
+
+    Thread {
+      mainThread.start()
+
+      while (true) {
         /*
         window title update runs in a separated
         thread, in order to show the rates even
@@ -48,14 +52,8 @@ class Engine(private val targetApp: AbstractApp) : Runnable {
         updates = 0
         Thread.sleep(1000)
       }
-    }
-
-    window.title = targetApp.title
-    targetApp.init()
-    ratesMeasurementHelper.start()
-    mainThread.start()
+    }.start()
   }
-
 
   /**
    * Runs a simple fixed time step loop.

@@ -32,8 +32,8 @@ class Triangle(
 
   var normal = 0f
   var averageZ = 0f
-  lateinit var renderMode: RenderMode
 
+  private lateinit var renderMode: RenderMode
   private lateinit var a: Vector3
   private lateinit var b: Vector3
   private lateinit var c: Vector3
@@ -199,7 +199,7 @@ class Triangle(
     if (renderMode == RenderMode.Fill || renderMode == RenderMode.FillAndOutline) {
       this.color.rgb
     } else {
-      if (targetTexture != null) {
+      if (renderMode == RenderMode.Texture || renderMode == RenderMode.TextureAndOutline) {
         val minX = min(a.x, min(b.x, c.x))
         val maxX = max(a.x, max(b.x, c.x))
         val minY = min(a.y, min(b.y, c.y))
@@ -235,17 +235,11 @@ class Triangle(
 
   fun defineRenderMode() {
     // TODO: implement outline handling decision based on MAGENTA
-
     renderMode = if (targetTexture == null) RenderMode.Fill
     else RenderMode.Texture
   }
 
-  override fun toString() =
-    "Triangle(" +
-            "p0=$p0, " +
-            "p1=$p1, " +
-            "p2=$p2, " +
-            "color=$color, " +
-            "normal=$normal, " +
-            "transformedPoints=${transformedPoints.contentToString()})"
+  override fun toString(): String {
+    return "Triangle(p0=$p0, p1=$p1, p2=$p2, normal=$normal, renderMode=$renderMode)"
+  }
 }

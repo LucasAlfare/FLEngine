@@ -22,6 +22,7 @@ class Mesh(
     triangles.forEach {
       it.targetTexture = texture
       it.defineRenderMode()
+      println(it)
     }
   }
 
@@ -39,7 +40,7 @@ class Mesh(
 
   override fun render(r: Renderer) {
     triangles.forEach {
-      if (it.normal < 0) {
+      if (it.normal > 0) {
         it.render(r)
       }
     }

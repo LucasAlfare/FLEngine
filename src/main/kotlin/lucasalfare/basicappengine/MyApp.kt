@@ -29,46 +29,15 @@ private val h = Vector3(1f, -1f, 1f)
  */
 class MyApp(title: String) : AbstractApp(title) {
 
-  private val cube = Mesh(
+  private val t = Mesh(
     triangles = arrayOf(
-      Triangle(p0 = a, p1 = b, p2 = d, color = Color.GREEN),
-      Triangle(p0 = d, p1 = b, p2 = c, color = Color.GREEN),
-
-      Triangle(p0 = f, p1 = e, p2 = a, color = Color.WHITE),
-      Triangle(p0 = a, p1 = e, p2 = b, color = Color.WHITE),
-
-      Triangle(p0 = b, p1 = e, p2 = c, color = Color.RED),
-      Triangle(p0 = c, p1 = e, p2 = h, color = Color.RED),
-
-      Triangle(p0 = e, p1 = f, p2 = h, color = Color.BLUE),
-      Triangle(p0 = h, p1 = f, p2 = g, color = Color.BLUE),
-
-      Triangle(p0 = f, p1 = a, p2 = g, color = Color.PINK),
-      Triangle(p0 = g, p1 = a, p2 = d, color = Color.PINK),
-
-      Triangle(p0 = d, p1 = c, p2 = g, color = Color.YELLOW),
-      Triangle(p0 = g, p1 = c, p2 = h, color = Color.YELLOW)
+      Triangle(
+        Vector3(-1, -1, 0),
+        Vector3(1, -1, 0),
+        Vector3(-1, 1, 0))
     ),
     scale = 100f,
-    texture = Texture("crate_texture.png")
-  )
-
-  private val plane = Mesh(
-    triangles = arrayOf(
-      Triangle(
-        Vector3(1, 0, -1),
-        Vector3(1, 0, 1),
-        Vector3(-1, 0, 1),
-        Color.CYAN
-      ),
-      Triangle(
-        Vector3(-1, 0, 1),
-        Vector3(-1, 0, -1),
-        Vector3(1, 0, -1),
-        Color.CYAN
-      )
-    ),
-    scale = 200f
+    texture = Texture("tri_test.png")
   )
 
   override fun init() {
@@ -78,19 +47,14 @@ class MyApp(title: String) : AbstractApp(title) {
   override fun update(vararg args: Any) {
     val timeStep = args[0] as Float
 
-    cube.update()
-    cube.rotation.x += 1 * timeStep
-    cube.rotation.y += 1 * timeStep
-    cube.rotation.z += 1 * timeStep
-
-//    plane.update()
-//    plane.position.y = 60f * timeStep
-//    plane.rotation.y -= 1 * timeStep
+    //t.rotation.x += 1 * timeStep
+    //t.rotation.y += 1 * timeStep
+    t.rotation.z += 1 * timeStep
+    t.update()
   }
 
   override fun render(r: Renderer) {
-    cube.render(r)
-    //plane.render(r)
+    t.render(r)
   }
 }
 

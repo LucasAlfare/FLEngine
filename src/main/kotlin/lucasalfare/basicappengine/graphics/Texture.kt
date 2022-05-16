@@ -10,7 +10,9 @@ import javax.imageio.ImageIO
 class Texture(res: String) {
 
   private val image: BufferedImage =
-    createCompatibleImageBasedOn(ImageIO.read(File(ResourcesPathPrefix + res)))
+    createCompatibleImageBasedOn(
+      ImageIO.read(File(ResourcesPathPrefix + res))
+    )
   private val pixelData: IntArray =
     (image.raster.dataBuffer as DataBufferInt).data
 
