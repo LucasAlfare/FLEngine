@@ -7,7 +7,7 @@ import com.lucasalfare.flengine.graphics.Renderer
  *
  * All subclasses from this can be passed to a [Engine] class instance.
  */
-abstract class AbstractApp(var title: String) : Handleable {
+abstract class App(var title: String) : Handleable {
 
   /**
    * This method is called before the [Engine] main loops is started,

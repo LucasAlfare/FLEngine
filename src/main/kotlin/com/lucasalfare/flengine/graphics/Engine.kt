@@ -1,10 +1,10 @@
 package com.lucasalfare.flengine.graphics
 
-import com.lucasalfare.flengine.AbstractApp
+import com.lucasalfare.flengine.App
 import com.lucasalfare.flengine.input.Input
 
 @Suppress("SameParameterValue", "MemberVisibilityCanBePrivate")
-class Engine(private val targetApp: AbstractApp) : Runnable {
+class Engine(private val targetApp: App) : Runnable {
 
   var width = 0
   var height = 0

@@ -26,7 +26,7 @@ private val h = Vector3(1f, -1f, 1f)
  * A custom class representing an Application that can be
  * updated and rendered by the [Engine].
  */
-class MyApp(title: String) : AbstractApp(title) {
+class MyApp(title: String) : App(title) {
 
   private val t = Mesh(
     triangles = arrayOf(
