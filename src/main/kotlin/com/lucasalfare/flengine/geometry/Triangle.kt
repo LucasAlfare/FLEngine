@@ -2,7 +2,6 @@ package com.lucasalfare.flengine.geometry
 
 import com.lucasalfare.flengine.Handleable
 import com.lucasalfare.flengine.graphics.*
-import lucasalfare.basicappengine.graphics.*
 import com.lucasalfare.flengine.math.UV
 import com.lucasalfare.flengine.math.Vector3
 import com.lucasalfare.flengine.math.percentile
