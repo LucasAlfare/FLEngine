@@ -1,7 +1,7 @@
-package lucasalfare.basicappengine.graphics
+package com.lucasalfare.flengine.graphics
 
-import lucasalfare.basicappengine.AbstractApp
-import lucasalfare.basicappengine.input.Input
+import com.lucasalfare.flengine.AbstractApp
+import com.lucasalfare.flengine.input.Input
 
 @Suppress("SameParameterValue")
 class Engine(private val targetApp: AbstractApp) : Runnable {

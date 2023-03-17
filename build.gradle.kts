@@ -4,7 +4,7 @@ plugins {
     kotlin("jvm") version "1.6.20"
 }
 
-group = "lucasalfare.basicappengine"
+group = "com.lucasalfare.flengine"
 version = "1.0-SNAPSHOT"
 
 repositories {

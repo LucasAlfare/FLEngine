@@ -1,4 +1,4 @@
-package lucasalfare.basicappengine.util
+package com.lucasalfare.flengine.util
 
 object ElapsedTimeChecker {
   fun check(times: Int, useNanos: Boolean, action: () -> Unit) {

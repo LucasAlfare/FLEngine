@@ -1,4 +1,4 @@
-package lucasalfare.basicappengine.math
+package com.lucasalfare.flengine.math
 
 import kotlin.math.cos
 import kotlin.math.sin

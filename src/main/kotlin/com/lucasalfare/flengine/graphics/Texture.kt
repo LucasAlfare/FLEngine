@@ -1,7 +1,7 @@
-package lucasalfare.basicappengine.graphics
+package com.lucasalfare.flengine.graphics
 
-import lucasalfare.basicappengine.ResourcesPathPrefix
-import lucasalfare.basicappengine.math.UV
+import com.lucasalfare.flengine.ResourcesPathPrefix
+import com.lucasalfare.flengine.math.UV
 import java.awt.image.BufferedImage
 import java.awt.image.DataBufferInt
 import java.io.File

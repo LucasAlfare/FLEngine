@@ -1,14 +1,13 @@
-package lucasalfare.basicappengine
+package com.lucasalfare.flengine
 
 /**
  * This file demonstrates some mesh rendering using the
  * own engine API.
  */
-import lucasalfare.basicappengine.graphics.*
-import lucasalfare.basicappengine.math.Vector3
-import lucasalfare.basicappengine.geometry.Mesh
-import lucasalfare.basicappengine.geometry.Triangle
-import java.awt.Color
+import com.lucasalfare.flengine.math.Vector3
+import com.lucasalfare.flengine.geometry.Mesh
+import com.lucasalfare.flengine.geometry.Triangle
+import com.lucasalfare.flengine.graphics.*
 
 /**
  * Only auxiliary fields to store points to the cube mesh.
@@ -34,7 +33,8 @@ class MyApp(title: String) : AbstractApp(title) {
       Triangle(
         Vector3(-1, -1, 0),
         Vector3(1, -1, 0),
-        Vector3(-1, 1, 0))
+        Vector3(-1, 1, 0)
+      )
     ),
     scale = 100f,
     texture = Texture("tri_test.png")

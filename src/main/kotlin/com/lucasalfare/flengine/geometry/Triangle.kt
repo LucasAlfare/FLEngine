@@ -1,10 +1,11 @@
-package lucasalfare.basicappengine.geometry
+package com.lucasalfare.flengine.geometry
 
-import lucasalfare.basicappengine.Handleable
+import com.lucasalfare.flengine.Handleable
+import com.lucasalfare.flengine.graphics.*
 import lucasalfare.basicappengine.graphics.*
-import lucasalfare.basicappengine.math.UV
-import lucasalfare.basicappengine.math.Vector3
-import lucasalfare.basicappengine.math.percentile
+import com.lucasalfare.flengine.math.UV
+import com.lucasalfare.flengine.math.Vector3
+import com.lucasalfare.flengine.math.percentile
 import java.awt.Color
 import kotlin.math.max
 import kotlin.math.min

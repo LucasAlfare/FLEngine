@@ -1,8 +1,8 @@
-package lucasalfare.basicappengine.math
+package com.lucasalfare.flengine.math
 
 
-import lucasalfare.basicappengine.graphics.ScreenWidth
-import lucasalfare.basicappengine.graphics.ScreenHeight
+import com.lucasalfare.flengine.graphics.ScreenWidth
+import com.lucasalfare.flengine.graphics.ScreenHeight
 import kotlin.math.PI
 import kotlin.math.tan
 

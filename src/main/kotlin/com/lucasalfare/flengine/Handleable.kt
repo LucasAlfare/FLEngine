@@ -1,6 +1,6 @@
-package lucasalfare.basicappengine
+package com.lucasalfare.flengine
 
-import lucasalfare.basicappengine.graphics.Renderer
+import com.lucasalfare.flengine.graphics.Renderer
 
 /**
  * Interface to describe an entity which usually can be

@@ -1,6 +1,6 @@
-package lucasalfare.basicappengine
+package com.lucasalfare.flengine
 
-import lucasalfare.basicappengine.graphics.Renderer
+import com.lucasalfare.flengine.graphics.Renderer
 
 /**
  * The application type that can be handled by the [Engine] class.

@@ -1,4 +1,4 @@
-package lucasalfare.basicappengine.graphics
+package com.lucasalfare.flengine.graphics
 
 import java.awt.*
 import java.awt.image.BufferStrategy

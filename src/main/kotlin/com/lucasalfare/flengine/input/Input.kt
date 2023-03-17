@@ -1,4 +1,4 @@
-package lucasalfare.basicappengine.input
+package com.lucasalfare.flengine.input
 
 import java.awt.Component
 import java.awt.Point

@@ -1,9 +1,9 @@
-package lucasalfare.basicappengine.geometry
+package com.lucasalfare.flengine.geometry
 
-import lucasalfare.basicappengine.Handleable
-import lucasalfare.basicappengine.graphics.Renderer
-import lucasalfare.basicappengine.graphics.Texture
-import lucasalfare.basicappengine.math.Vector3
+import com.lucasalfare.flengine.Handleable
+import com.lucasalfare.flengine.graphics.Renderer
+import com.lucasalfare.flengine.graphics.Texture
+import com.lucasalfare.flengine.math.Vector3
 
 /**
  * Class used to hold triangles that can represent an
