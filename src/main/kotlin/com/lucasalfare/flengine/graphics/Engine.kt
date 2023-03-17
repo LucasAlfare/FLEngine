@@ -3,7 +3,7 @@ package com.lucasalfare.flengine.graphics
 import com.lucasalfare.flengine.AbstractApp
 import com.lucasalfare.flengine.input.Input
 
-@Suppress("SameParameterValue")
+@Suppress("SameParameterValue", "MemberVisibilityCanBePrivate")
 class Engine(private val targetApp: AbstractApp) : Runnable {
 
   var width = 0
