@@ -12,7 +12,7 @@ ou can grab this project directly from its [GitHub page](https://github.com/Luca
 
 ```kotlin
 sourceControl {
-  gitRepository(URI("https://github.com/LucasAlfare/FLEngine")) {
+  gitRepository(java.net.URI("https://github.com/LucasAlfare/FLEngine")) {
     producesModule("com.lucasalfare.flengine:FLEngine")
   }
 }
