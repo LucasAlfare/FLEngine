@@ -15,3 +15,7 @@ repositories {
 dependencies {
     implementation("com.github.KPhysics:KPhysics:-SNAPSHOT")
 }
+
+tasks.withType<KotlinCompile> {
+    kotlinOptions.jvmTarget = "17"
+}
