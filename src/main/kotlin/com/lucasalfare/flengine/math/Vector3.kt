@@ -1,10 +1,11 @@
+@file:Suppress("MemberVisibilityCanBePrivate", "unused")
+
 package com.lucasalfare.flengine.math
 
 import kotlin.math.cos
 import kotlin.math.sin
 import kotlin.math.sqrt
 
-@Suppress("MemberVisibilityCanBePrivate")
 class Vector3(
   var x: Float = 0f,
   var y: Float = 0f,
@@ -75,22 +76,22 @@ class Vector3(
     z = z * scalar
   )
 
-  fun rotate(rotationPoint: Vector3) = Vector3(
-    x = x * (cos(rotationPoint.z) * cos(rotationPoint.y)) +
-            y * (cos(rotationPoint.z) * sin(rotationPoint.y) * sin(rotationPoint.x) -
-            sin(rotationPoint.z) * cos(rotationPoint.x)) +
-            z * (cos(rotationPoint.z) * sin(rotationPoint.y) * cos(rotationPoint.x) +
-            sin(rotationPoint.z) * sin(rotationPoint.x)),
+  fun rotateAround(point: Vector3) = Vector3(
+    x = x * (cos(point.z) * cos(point.y)) +
+            y * (cos(point.z) * sin(point.y) * sin(point.x) -
+            sin(point.z) * cos(point.x)) +
+            z * (cos(point.z) * sin(point.y) * cos(point.x) +
+            sin(point.z) * sin(point.x)),
 
-    y = x * (sin(rotationPoint.z) * cos(rotationPoint.y)) +
-            y * (sin(rotationPoint.z) * sin(rotationPoint.y) * sin(rotationPoint.x) +
-            cos(rotationPoint.z) * cos(rotationPoint.x)) +
-            z * (sin(rotationPoint.z) * sin(rotationPoint.y) * cos(rotationPoint.x) -
-            cos(rotationPoint.z) * sin(rotationPoint.x)),
+    y = x * (sin(point.z) * cos(point.y)) +
+            y * (sin(point.z) * sin(point.y) * sin(point.x) +
+            cos(point.z) * cos(point.x)) +
+            z * (sin(point.z) * sin(point.y) * cos(point.x) -
+            cos(point.z) * sin(point.x)),
 
-    z = x * (-sin(rotationPoint.y)) +
-            y * (cos(rotationPoint.y) * sin(rotationPoint.x)) +
-            z * (cos(rotationPoint.y) * cos(rotationPoint.x))
+    z = x * (-sin(point.y)) +
+            y * (cos(point.y) * sin(point.x)) +
+            z * (cos(point.y) * cos(point.x))
   )
 
   fun perspective() = Vector3(

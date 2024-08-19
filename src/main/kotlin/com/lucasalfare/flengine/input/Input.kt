@@ -5,12 +5,8 @@ import java.awt.Point
 import java.awt.event.*
 
 class Input(
-  inputEventsGenerator: Component,
-  private var customScalingFactor: Float = 1f
-) : KeyListener,
-  MouseListener,
-  MouseMotionListener,
-  MouseWheelListener {
+  inputEventsGenerator: Component, private var customScalingFactor: Float = 1f
+) : KeyListener, MouseListener, MouseMotionListener, MouseWheelListener {
 
   private var mouseMoving = false
 
@@ -31,8 +27,7 @@ class Input(
     lastMouseY = Companion.mouseY
   }
 
-  override fun keyTyped(e: KeyEvent) {
-    /*--*/
+  override fun keyTyped(e: KeyEvent) {/*--*/
   }
 
   override fun keyPressed(e: KeyEvent) {

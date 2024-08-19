@@ -96,5 +96,5 @@ class Renderer(var targetImage: BufferedImage) {
 
   private fun coordInBounds(x: Int, y: Int) =
     (x >= 0) && (x < targetImage.width) &&
-    (y >= 0) && (y < targetImage.height)
+            (y >= 0) && (y < targetImage.height)
 }

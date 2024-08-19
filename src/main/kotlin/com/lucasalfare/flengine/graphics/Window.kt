@@ -1,6 +1,8 @@
 package com.lucasalfare.flengine.graphics
 
-import java.awt.*
+import java.awt.BorderLayout
+import java.awt.Canvas
+import java.awt.Dimension
 import java.awt.image.BufferStrategy
 import java.awt.image.BufferedImage
 import javax.swing.JFrame

@@ -4,10 +4,10 @@ package com.lucasalfare.flengine
  * This file demonstrates some mesh rendering using the
  * own engine API.
  */
-import com.lucasalfare.flengine.math.Vector3
 import com.lucasalfare.flengine.geometry.Mesh
 import com.lucasalfare.flengine.geometry.Triangle
 import com.lucasalfare.flengine.graphics.*
+import com.lucasalfare.flengine.math.Vector3
 
 /**
  * Only auxiliary fields to store points to the cube mesh.

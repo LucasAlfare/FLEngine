@@ -59,9 +59,9 @@ class Triangle(
     val scale = args[2] as Float
 
     // first transforms (store results in separate fields)
-    a = p0.translate(position).rotate(rotation).scale(scale)
-    b = p1.translate(position).rotate(rotation).scale(scale)
-    c = p2.translate(position).rotate(rotation).scale(scale)
+    a = p0.translate(position).rotateAround(rotation).scale(scale)
+    b = p1.translate(position).rotateAround(rotation).scale(scale)
+    c = p2.translate(position).rotateAround(rotation).scale(scale)
 
     // calculates arithmetically the average Z value of this
     // triangle before applying perspective
