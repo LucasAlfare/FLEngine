@@ -12,16 +12,12 @@ class Vector3(
   var z: Float = 0f
 ) {
 
-  constructor(x: Int, y: Int, z: Int) : this(x.toFloat(), y.toFloat(), z.toFloat())
-
-  fun length() =
-    sqrt((x * x) + (y * y) + (z * z))
+  fun length() = sqrt((x * x) + (y * y) + (z * z))
 
   /**
    * Returns the dot product between this vector and the param [v].
    */
-  fun dotProduct(v: Vector3) =
-    (x * v.x) + (y * v.y) + (z * v.z)
+  fun dotProduct(v: Vector3) = (x * v.x) + (y * v.y) + (z * v.z)
 
   /**
    * Returns the cross product between this vector and the param [v].
@@ -94,17 +90,6 @@ class Vector3(
             z * (cos(point.y) * cos(point.x))
   )
 
-  fun perspective() = Vector3(
-    x = x * getZ0() / (getZ0() + z),
-    y = y * getZ0() / (getZ0() + z),
-    z = z
-  )
-
-  fun centralize(width: Float, height: Float) = Vector3(
-    x = x + (width / 2),
-    y = y + (height / 2)
-  )
-
   /**
    * Returns the distance between this vector and the vector of the param [v].
    */
@@ -116,12 +101,12 @@ class Vector3(
   }
 
   /**
-   * Sets the values of this vector to be the same of the passed vector [v].
+   * Sets the values of this vector to be the same of the passed vector [source].
    */
-  fun copy(v: Vector3) {
-    this.x = v.x
-    this.y = v.y
-    this.z = v.z
+  fun copyFrom(source: Vector3) {
+    this.x = source.x
+    this.y = source.y
+    this.z = source.z
   }
 
   /**

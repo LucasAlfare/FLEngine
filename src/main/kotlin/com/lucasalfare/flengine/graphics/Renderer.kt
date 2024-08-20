@@ -33,7 +33,7 @@ class Renderer(var targetImage: BufferedImage) {
    * - the color passed is not equals to the [transparentColor] value defined ins this class.
    */
   fun setPixel(x: Int, y: Int, color: Int) {
-    if (!coordInBounds(x, y) || color == transparentColor) return
+    if (!coordInBounds(x, y) || color == Color.MAGENTA.rgb) return
     pixelData[x + y * targetImage.width] = color
   }
 

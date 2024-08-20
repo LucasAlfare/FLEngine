@@ -24,7 +24,18 @@ class Window(
    * This is the target image that will be constantly redrawn
    * on each frame by a [Renderer].
    */
-  val renderingImage: BufferedImage
+  //setup root image
+  val renderingImage: BufferedImage = GraphicsUtils.createCompatibleImageBasedOn(
+    BufferedImage(
+      width,
+      height,
+      /*
+       The color format is set to the simple RGB (e.g.: 0xRR_GG_BB)
+       once transparency is handled directly by the [Renderer].
+       */
+      BufferedImage.TYPE_INT_RGB
+    )
+  )
 
   /**
    * This canvas works as a container to hold the [renderingImage].
@@ -50,18 +61,6 @@ class Window(
   private val strategy: BufferStrategy
 
   init {
-    //setup root image
-    renderingImage = createCompatibleImageBasedOn(
-      BufferedImage(
-        width,
-        height,
-        /*
-         The color format is set to the simple RGB (e.g.: 0xRR_GG_BB)
-         once transparency is handled directly by the [Renderer].
-         */
-        BufferedImage.TYPE_INT_RGB
-      )
-    )
 
     //setup canvas
     val canvasWidth = (width * scale).toInt()
