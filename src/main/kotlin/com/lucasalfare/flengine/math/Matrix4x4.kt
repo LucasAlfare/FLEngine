@@ -105,7 +105,7 @@ class Matrix4x4(val data: FloatArray = FloatArray(4 * 4) { 0f }) {
     }
 
     // https://i.sstatic.net/C9PST.jpg
-    fun perspective(fov: Float, aspect: Float, zNear: Float, zFar: Float): Matrix4x4 {
+    fun perspectiveMatrix(fov: Float, aspect: Float, zNear: Float, zFar: Float): Matrix4x4 {
       val factor = tan(Math.toRadians(fov / 2.0).toFloat())
       return Matrix4x4(
         floatArrayOf(

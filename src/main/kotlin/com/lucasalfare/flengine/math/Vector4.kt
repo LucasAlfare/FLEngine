@@ -12,6 +12,15 @@ data class Vector4(
 
   fun dotProduct(v: Vector4) = (x * v.x) + (y * v.y) + (z * v.z) + (w * v.w)
 
+  fun crossProduct(v: Vector4): Vector4 {
+    return Vector4(
+      x = this.y * v.z - this.z * v.y,
+      y = this.z * v.x - this.x * v.z,
+      z = this.x * v.y - this.y * v.x,
+      w = 0f
+    )
+  }
+
   fun add(v: Vector4) = Vector4(
     x = x + v.x,
     y = y + v.y,
