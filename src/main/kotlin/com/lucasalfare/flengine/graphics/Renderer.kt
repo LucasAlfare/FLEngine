@@ -1,6 +1,7 @@
 package com.lucasalfare.flengine.graphics
 
 import java.awt.Color
+import java.awt.Graphics2D
 import java.awt.image.BufferedImage
 import java.awt.image.DataBufferInt
 import java.util.*
@@ -20,6 +21,8 @@ class Renderer(var targetImage: BufferedImage) {
    * Modifying this array automatically affects the target image.
    */
   private var pixelData: IntArray = (targetImage.raster.dataBuffer as DataBufferInt).data
+
+  private lateinit var g: Graphics2D
 
   fun clear() {
     pixelData.fill(clearColor)
@@ -92,7 +95,10 @@ class Renderer(var targetImage: BufferedImage) {
    * package. For this reason, any instance of that is keep here, however, if needed, the
    * graphics from [java.awt] can be retrieved from this function.
    */
-  fun createGraphics() = targetImage.createGraphics()
+  fun createGraphics(): Graphics2D {
+    if (!::g.isInitialized) g = targetImage.createGraphics()
+    return g
+  }
 
   private fun coordInBounds(x: Int, y: Int) =
     (x >= 0) && (x < targetImage.width) &&

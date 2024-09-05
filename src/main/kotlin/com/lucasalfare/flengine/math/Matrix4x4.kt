@@ -5,138 +5,270 @@ package com.lucasalfare.flengine.math
 import java.util.*
 import kotlin.math.cos
 import kotlin.math.sin
-import kotlin.math.tan
 
-class Matrix4x4(val data: FloatArray = FloatArray(4 * 4) { 0f }) {
+/**
+ * Represents a 4x4 matrix used for various transformations in 3D space.
+ *
+ * This class treats a linear collection of elements as a bidimensional 4x4 matrix,
+ * providing methods to perform common matrix operations such as translation,
+ * scaling, and rotation along the X, Y, and Z axes. It also supports matrix
+ * multiplication and provides utility functions for setting and retrieving matrix elements.
+ *
+ * @property elements An array of 16 double values representing the matrix elements in row-major order.
+ *
+ * @throws IllegalArgumentException If the number of elements provided is not exactly 16.
+ */
+class Matrix4x4(vararg var elements: Double) {
 
-  fun setIdentify() {
-    Arrays.fill(data, 0f)
-    listOf(0, 5, 10, 15).forEach { data[it] = 1f }
+  /**
+   * Initializes the Matrix4x4 instance.
+   *
+   * If exactly 16 elements are provided, they are used to populate the matrix.
+   * If no elements are provided, the matrix is initialized as an identity matrix.
+   *
+   * @throws IllegalArgumentException If the number of elements is between 1 and 15.
+   */
+  init {
+    // Only creates a matrix if it has exactly 16 elements or...
+    if (elements.size in 1..15)
+      throw IllegalArgumentException("Matrix must contain exactly 16 elements.")
+
+    // ...if it is empty (then this is set to identity matrix)
+    if (elements.isEmpty()) {
+      elements = DoubleArray(16) { 0.0 }
+      setIdentity()
+    }
   }
 
-  fun multiply(other: Matrix4x4): Matrix4x4 {
+  /**
+   * Companion object containing factory methods for creating common transformation matrices.
+   */
+  companion object {
+    /**
+     * Creates a translation matrix based on the provided translation values.
+     *
+     * @param tx Translation along the X-axis. Defaults to 0.0.
+     * @param ty Translation along the Y-axis. Defaults to 0.0.
+     * @param tz Translation along the Z-axis. Defaults to 0.0.
+     * @return A new Matrix4x4 instance representing the translation.
+     *
+     * @see [Translation Matrix](https://static.javatpoint.com/tutorial/computer-graphics/images/computer-graphics-3d-transformations3.png)
+     */
+    fun translationMatrix(tx: Double = 0.0, ty: Double = 0.0, tz: Double = 0.0): Matrix4x4 {
+      // @formatter:off
+      return Matrix4x4(
+        1.0, 0.0, 0.0,  tx,
+        0.0, 1.0, 0.0,  ty,
+        0.0, 0.0, 1.0,  tz,
+        0.0, 0.0, 0.0, 1.0
+      )
+      // @formatter:on
+    }
+
+    /**
+     * Creates a scaling matrix based on the provided scaling factors.
+     *
+     * @param sx Scaling factor along the X-axis. Defaults to 1.0.
+     * @param sy Scaling factor along the Y-axis. Defaults to 1.0.
+     * @param sz Scaling factor along the Z-axis. Defaults to 1.0.
+     * @return A new Matrix4x4 instance representing the scaling.
+     *
+     * @see [Scaling Matrix](http://www.c-jump.com/bcc/common/Talk3/Math/Matrices/const_images/applying_scaling.png)
+     */
+    fun scaleMatrix(sx: Double = 1.0, sy: Double = 1.0, sz: Double = 1.0): Matrix4x4 {
+      // @formatter:off
+      return Matrix4x4(
+        sx, 0.0, 0.0, 0.0,
+        0.0,  sy, 0.0, 0.0,
+        0.0, 0.0,  sz, 0.0,
+        0.0, 0.0, 0.0, 1.0
+      )
+      // @formatter:on
+    }
+
+    /**
+     * Creates a rotation matrix around the X-axis based on the provided angle.
+     *
+     * @param degreeAngle The angle in degrees to rotate around the X-axis. Defaults to 0.0.
+     * @return A new Matrix4x4 instance representing the rotation around the X-axis.
+     *
+     * @see [Rotation Matrix X](https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQkOm2Vs8YxvEDDMNHS8vRNrdfavXSfcM4JuA&s)
+     */
+    fun rotationXMatrix(degreeAngle: Double = 0.0): Matrix4x4 {
+      val radians = Math.toRadians(degreeAngle)
+      val sin = sin(radians)
+      val cos = cos(radians)
+      // @formatter:off
+      return Matrix4x4(
+        1.0,  0.0,  0.0,  0.0,
+        0.0,  cos, -sin,  0.0,
+        0.0,  sin,  cos,  0.0,
+        0.0,  0.0,  0.0,  1.0
+      )
+      // @formatter:on
+    }
+
+    /**
+     * Creates a rotation matrix around the Y-axis based on the provided angle.
+     *
+     * @param degreeAngle The angle in degrees to rotate around the Y-axis. Defaults to 0.0.
+     * @return A new Matrix4x4 instance representing the rotation around the Y-axis.
+     *
+     * @see [Rotation Matrix Y](https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQkOm2Vs8YxvEDDMNHS8vRNrdfavXSfcM4JuA&s)
+     */
+    fun rotationYMatrix(degreeAngle: Double = 0.0): Matrix4x4 {
+      val radians = Math.toRadians(degreeAngle)
+      val sin = sin(radians)
+      val cos = cos(radians)
+      // @formatter:off
+      return Matrix4x4(
+        cos,  0.0,  sin,  0.0,
+        0.0,  1.0,  0.0,  0.0,
+        -sin,  0.0,  cos,  0.0,
+        0.0,  0.0,  0.0,  1.0
+      )
+      // @formatter:on
+    }
+
+    /**
+     * Creates a rotation matrix around the Z-axis based on the provided angle.
+     *
+     * @param degreeAngle The angle in degrees to rotate around the Z-axis. Defaults to 0.0.
+     * @return A new Matrix4x4 instance representing the rotation around the Z-axis.
+     *
+     * @see [Rotation Matrix Z](https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQkOm2Vs8YxvEDDMNHS8vRNrdfavXSfcM4JuA&s)
+     */
+    fun rotationZMatrix(degreeAngle: Double = 0.0): Matrix4x4 {
+      val radians = Math.toRadians(degreeAngle)
+      val sin = sin(radians)
+      val cos = cos(radians)
+      // @formatter:off
+      return Matrix4x4(
+        cos, -sin,  0.0,  0.0,
+        sin,  cos,  0.0,  0.0,
+        0.0,  0.0,  1.0,  0.0,
+        0.0,  0.0,  0.0,  1.0
+      )
+      // @formatter:on
+    }
+  }
+
+  /**
+   * Multiplies the current matrix with another Matrix4x4.
+   *
+   * This method performs standard matrix multiplication, where each element of the resulting
+   * matrix is the dot product of the corresponding row from the first matrix and the column
+   * from the second matrix.
+   *
+   * @param m The Matrix4x4 to multiply with the current matrix.
+   * @return A new Matrix4x4 instance representing the product of the two matrices.
+   */
+  fun multiply(m: Matrix4x4): Matrix4x4 {
     val result = Matrix4x4()
-    for (i in 0 until 4) {
-      for (j in 0 until 4) {
-        var sum = 0f
-        for (k in 0 until 4)
-          sum += this.get(i, k) * other.get(k, j)
-        result.set(sum, i, j)
+    repeat(4) { i ->
+      repeat(4) { j ->
+        var sum = 0.0
+        repeat(4) { k ->
+          sum += this.get(k, i) * m.get(j, k)
+        }
+        result.set(j, i, sum)
       }
     }
+
     return result
   }
 
-  fun get(x: Int, y: Int) = data[x + y * 4]
+  /**
+   * Sets the current matrix to be an identity matrix.
+   *
+   * This method sets the diagonal elements (top-left to bottom-right) to 1.0 and all other
+   * elements to 0.0, effectively making it an identity matrix.
+   *
+   * @return The current Matrix4x4 instance after being set to identity.
+   */
+  fun setIdentity(): Matrix4x4 {
+    repeat(4) { y ->
+      repeat(4) { x ->
+        if (x == y) set(x, y, 1.0)
+        else set(x, y, 0.0)
+      }
+    }
 
-  fun set(f: Float, x: Int, y: Int) {
-    data[x + y * 4] = f
+    return this
   }
 
-  // static functions to generate transformation matrixes based on arguments
-  companion object {
-
-    // https://en.wikipedia.org/wiki/Rotation_matrix
-    fun rotationX(angle: Float): Matrix4x4 {
-      val radians = Math.toRadians(angle.toDouble())
-      val sinTheta = sin(radians).toFloat()
-      val cosTheta = cos(radians).toFloat()
-
-      return Matrix4x4(
-        floatArrayOf(
-          1f, 0f, 0f, 0f,
-          0f, cosTheta, -sinTheta, 0f,
-          0f, sinTheta, cosTheta, 0f,
-          0f, 0f, 0f, 1f
-        )
-      )
-    }
-
-    // https://en.wikipedia.org/wiki/Rotation_matrix
-    fun rotationY(angle: Float): Matrix4x4 {
-      val radians = Math.toRadians(angle.toDouble())
-      val sinTheta = sin(radians).toFloat()
-      val cosTheta = cos(radians).toFloat()
-
-      return Matrix4x4(
-        floatArrayOf(
-          cosTheta, 0f, sinTheta, 0f,
-          0f, 1f, 0f, 0f,
-          -sinTheta, 0f, cosTheta, 0f,
-          0f, 0f, 0f, 1f
-        )
-      )
-    }
-
-    // https://en.wikipedia.org/wiki/Rotation_matrix
-    fun rotationZ(angle: Float): Matrix4x4 {
-      val radians = Math.toRadians(angle.toDouble())
-      val sinTheta = sin(radians).toFloat()
-      val cosTheta = cos(radians).toFloat()
-
-      return Matrix4x4(
-        floatArrayOf(
-          cosTheta, -sinTheta, 0f, 0f,
-          sinTheta, cosTheta, 0f, 0f,
-          0f, 0f, 1f, 0f,
-          0f, 0f, 0f, 1f
-        )
-      )
-    }
-
-    // https://static.javatpoint.com/tutorial/computer-graphics/images/computer-graphics-3d-transformations3.png
-    fun translationMatrix(tx: Float, ty: Float, tz: Float): Matrix4x4 {
-      val matrix = Matrix4x4()
-      matrix.setIdentify()
-      matrix.set(tx, 3, 0)
-      matrix.set(ty, 3, 1)
-      matrix.set(tz, 3, 2)
-      return matrix
-    }
-
-    // http://www.c-jump.com/bcc/common/Talk3/Math/Matrices/const_images/applying_scaling.png
-    fun scaleMatrix(sx: Float, sy: Float, sz: Float): Matrix4x4 {
-      val matrix = Matrix4x4()
-      matrix.setIdentify()
-      matrix.set(sx, 0, 0)
-      matrix.set(sy, 1, 1)
-      matrix.set(sz, 2, 2)
-      return matrix
-    }
-
-    // https://i.sstatic.net/C9PST.jpg
-    fun perspectiveMatrix(fov: Float, aspect: Float, zNear: Float, zFar: Float): Matrix4x4 {
-      val factor = tan(Math.toRadians(fov / 2.0).toFloat())
-      return Matrix4x4(
-        floatArrayOf(
-          1f / (aspect * factor), 0f, 0f, 0f,
-          0f, 1f / factor, 0f, 0f,
-          0f, 0f, -((zFar + zNear) / (zFar - zNear)), -((2 * zFar * zNear) / (zFar - zNear)),
-          0f, 0f, -1f, 0f
-        )
-      )
-    }
-
-    // https://wikimedia.org/api/rest_v1/media/math/render/svg/8ea4e438d7439b8fa504fb53fd7fafd678007243
-    fun orthographic(left: Float, right: Float, bottom: Float, top: Float, zNear: Float, zFar: Float): Matrix4x4 {
-      return Matrix4x4(
-        floatArrayOf(
-          2f / (right - left), 0f, 0f, -((right + left) / (right - left)),
-          0f, 2f / (top - bottom), 0f, -((top + bottom) / (top - bottom)),
-          0f, 0f, -2f / (zFar - zNear), -((zFar + zNear) / (zFar - zNear)),
-          0f, 0f, 0f, 1f
-        )
-      )
-    }
+  /**
+   * Retrieves the value at the specified coordinates in the matrix.
+   *
+   * @param x The column index (0-based).
+   * @param y The row index (0-based).
+   * @return The double value at the specified (x, y) position.
+   *
+   * @throws IndexOutOfBoundsException If x or y is outside the range [0, 3].
+   */
+  fun get(x: Int, y: Int): Double {
+    return elements[x + y * 4]
   }
 
+  /**
+   * Sets the value at the specified coordinates in the matrix.
+   *
+   * @param x The column index (0-based).
+   * @param y The row index (0-based).
+   * @param d The double value to set at the specified (x, y) position.
+   *
+   * @throws IndexOutOfBoundsException If x or y is outside the range [0, 3].
+   */
+  fun set(x: Int, y: Int, d: Double) {
+    elements[x + y * 4] = d
+  }
+
+  /**
+   * Returns a string representation of the matrix for debugging purposes.
+   *
+   * The matrix is formatted in a readable 4x4 structure with each element rounded to one decimal place.
+   *
+   * @return A string representing the matrix.
+   */
   override fun toString(): String {
-    val formattedMatrix = Array(4) { row ->
-      Array(4) { col ->
-        String.format(Locale.US, "%.1f", data[row * 4 + col])
-      }.joinToString(" ", "[", "]")
-    }.joinToString("\n")
+    var s = "[\n"
 
-    return "Matrix4x4:\n$formattedMatrix"
+    repeat(4) { y ->
+      repeat(4) { x ->
+        s += "\t"
+        s += "${String.format("%.1f", get(x, y))} ".replace(",", ".")
+      }
+
+      s += "\n"
+    }
+
+    return "$s]"
   }
+
+  /**
+   * Checks if this matrix is equal to another object.
+   *
+   * Two Matrix4x4 instances are considered equal if their elements are identical.
+   *
+   * @param other The object to compare with.
+   * @return `true` if the other object is a Matrix4x4 with the same elements, `false` otherwise.
+   */
+  override fun equals(other: Any?): Boolean {
+    if (other == null) return false
+    if (other !is Matrix4x4) return false
+    return this.elements.contentEquals(other.elements)
+  }
+
+  /**
+   * Returns the hash code for this matrix.
+   *
+   * This implementation is based on the hash code of the elements array.
+   *
+   * @return The hash code of the matrix.
+   */
+  override fun hashCode(): Int {
+    return elements.contentHashCode()
+  }
+
+  operator fun times(m: Matrix4x4) = multiply(m)
 }
