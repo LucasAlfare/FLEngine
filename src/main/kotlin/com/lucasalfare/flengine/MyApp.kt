@@ -24,10 +24,10 @@ class MyApp(title: String) : App(title) {
   )
 
   private var angle: Double = 0.0
-
   private var transformedPoints = listOf<Vector4>()
-
   private var path = Path2D.Double()
+
+  var zzz = 0.0
 
   override fun init() {
 
@@ -36,15 +36,14 @@ class MyApp(title: String) : App(title) {
   override fun update(vararg args: Any) {
     val timeStep = args[0] as Float
 
-    println(angle)
     if (angle >= 360) angle = 0.0
 
     transformedPoints = objPoints.map {
       it
-        .multiply(Matrix4x4.translationMatrix(tz = 10.0))
-//          .multiply(Matrix4x4.rotationXMatrix(angle))
-          .multiply(Matrix4x4.rotationYMatrix(angle))
-//          .multiply(Matrix4x4.rotationZMatrix(angle))
+//        .multiply(Matrix4x4.rotationXMatrix(angle))
+        .multiply(Matrix4x4.rotationYMatrix(angle))
+//        .multiply(Matrix4x4.rotationZMatrix(angle))
+        .multiply(Matrix4x4.translationMatrix(tz = 100.0))
         .multiply(camera.combinedMatrix())
         .toViewportCoordinates(ScreenWidth.toInt(), ScreenHeight.toInt())
     }
@@ -56,13 +55,13 @@ class MyApp(title: String) : App(title) {
     }
     path.closePath()
 
-    angle += 15 * timeStep
+    angle += 90 * timeStep
+    zzz += 1 * timeStep
+    camera.position.z += zzz
   }
 
   override fun render(r: Renderer) {
     val g = r.createGraphics()
-
-//    r.drawLine(50, 50, 100, 100, Color.WHITE.rgb)
 
     g.color = Color.WHITE
     g.draw(path)

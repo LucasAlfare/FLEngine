@@ -108,5 +108,5 @@ data class Camera(
    * The combined matrix is crucial in the rendering pipeline, as it allows objects in the world space
    * to be projected onto the screen with the correct perspective and orientation.
    */
-  fun combinedMatrix() = viewMatrix(this) * perspectiveMatrix(this)
+  fun combinedMatrix() = perspectiveMatrix(this) * viewMatrix(this)
 }

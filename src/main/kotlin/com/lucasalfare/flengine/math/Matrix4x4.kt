@@ -42,6 +42,8 @@ class Matrix4x4(vararg var elements: Double) {
 
   /**
    * Companion object containing factory methods for creating common transformation matrices.
+   *
+   * Hint: always rotate/scale before translate!!! 😲
    */
   companion object {
     /**
@@ -64,6 +66,21 @@ class Matrix4x4(vararg var elements: Double) {
       )
       // @formatter:on
     }
+
+    /**
+     * Creates a scaling matrix based on the provided scaling factors.
+     *
+     * @param singleScalar The value to scale all the axis. Menas that the same value will be used to scale all.
+     * @return A new Matrix4x4 instance representing the scaling.
+     *
+     * @see [Scaling Matrix](http://www.c-jump.com/bcc/common/Talk3/Math/Matrices/const_images/applying_scaling.png)
+     */
+    fun scaleMatrix(singleScalar: Double) =
+      scaleMatrix(
+        sx = singleScalar,
+        sy = singleScalar,
+        sz = singleScalar
+      )
 
     /**
      * Creates a scaling matrix based on the provided scaling factors.
